@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  reverseproxy:
+    #image: nginx
+    build: ./vendor/client/
+    container_name: proxy
+    ports:
+      - 0.0.0.0:80:80
+    external_links:
+      - springboot:tomcat
+    volumes:
+      - ./.docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+  springboot:
+    build: .
+    container_name: java-app
+    restart: always
+    command: java -jar /target/facilitytoos-0.0.1-SNAPSHOT.jar
+    external_links:
+      - mongo
+  mongo:
+    image: mongo:3.6.17
+    container_name: database
+    restart: always
+    volumes:
+      - /data/database:/data/db
+#  frontend:
+#    build: ./vendor/frontend/
+#    container_name: frontend
+#    restart: always

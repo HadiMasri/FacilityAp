@@ -1,0 +1,39 @@
+spring:
+  security:
+    oauth2:
+      client:
+        provider:
+          azure:
+            token-uri: https://login.microsoftonline.com/33d8cf3c-2f14-48c0-9ad6-5d2825533673/oauth2/v2.0/token
+            authorization-uri:  https://login.microsoftonline.com/33d8cf3c-2f14-48c0-9ad6-5d2825533673/oauth2/v2.0/authorize
+            user-info-uri: https://graph.microsoft.com/oidc/userinfo
+            jwks-uri: https://login.microsoftonline.com/33d8cf3c-2f14-48c0-9ad6-5d2825533673/discovery/v2.0/keys
+            user-name-attribute: name
+        registration:
+          azure:
+            client-authentication-method: BASIC
+            provider: azure
+            client-id: 9bd2bdfb-65a6-4683-b961-e827d7e0c156
+            client-secret: YyO6IaB1xD5pJ=?jWc3UU_znlaEd.2aj
+            redirect-uri: "{baseUrl}/login/oauth2/code/azure"
+            scope:
+              - https://graph.microsoft.com/openid
+              - https://graph.microsoft.com/profile
+
+
+app:
+  auth:
+    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
+    tokenExpirationMsec: 7200000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:4200/oauth2/redirect
+      - http://localhost:4200/
+
+
+
+azure:
+  activedirectory:
+    tenant-id: 33d8cf3c-2f14-48c0-9ad6-5d2825533673
+    active-directory-groups:
+      - Users

@@ -1,0 +1,8 @@
+POST http://localhost:8080/api/mail
+Content-Type: application/json
+
+{
+  "sender": "Mark Boamah",
+  "receiver": "test@ap.be",
+  "content": "Just testing"
+}
