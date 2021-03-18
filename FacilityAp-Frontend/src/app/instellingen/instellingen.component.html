@@ -1,0 +1,459 @@
+<div class="container">
+    <div class="accordion container" id="accordionExample">
+        <!------------------------------------------------------------------ Role beheer ------------------------------------------------------------------------------->
+        <div *ngIf="authService.isAdmin" class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <i class="fa fa-users users-icon" aria-hidden="true"></i> Rollenbeheer
+                    </button>
+                </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <mat-action-list>
+                        <button mat-list-item (click)="addRole('Admin')">
+                        <i class="fas fa-edit EditAdminIcon mr-2"></i>
+                      Admins
+                    </button>
+                        <button mat-list-item (click)="addRole('LogistiekeCoordinator')">
+                        <i class="fas fa-edit EditAdminIcon mr-2"></i>
+                      Logistieke Coordinator
+                    </button>
+                        <button mat-list-item (click)="addRole('LogistiekeMedewerker')">
+                        <i class="fas fa-edit EditAdminIcon mr-2"></i>
+                      Logistieke Medewerker
+                    </button>
+                        <button mat-list-item (click)="addRole('FacilitaireMedewerker')">
+                        <i class="fas fa-edit EditAdminIcon mr-2"></i>
+                      Facilitaire Medewerker
+                    </button>
+                        <button mat-list-item (click)="addRole('FacilitaireCoordinator')">
+                        <i class="fas fa-edit EditAdminIcon mr-2"></i>
+                      Facilitaire Coordinator
+                    </button>
+                        <button mat-list-item (click)="addRole('Opleidinghoofd')">
+                        <i class="fas fa-edit EditAdminIcon mr-2"></i>
+                        Opleidinghoofd
+                    </button>
+                        <button mat-list-item (click)="addRole('Medewerker')">
+            <i class="fas fa-edit EditAdminIcon mr-2"></i>
+            Medewerker
+        </button>
+                    </mat-action-list>
+                </div>
+            </div>
+        </div>
+        <!------------------------------------------------------------------ END Role beheer ------------------------------------------------------------------------------->
+        <!------------------------------------------------------------------ External Firms ------------------------------------------------------------------------------->
+        <div *ngIf="authService.isAdmin" class="card">
+            <div class="card-header" id="headingFour">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                    <i class="fa fa-building building"></i><span>Externe Firma's</span>
+                  </button>
+                </h5>
+            </div>
+
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">E-mailadres</th>
+                                <th scope="col"> Firma Naam</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor=" let externalFirm of externalFirmsList">
+                                <td>{{externalFirm.email}}</td>
+                                <td>{{externalFirm.displayName}}</td>
+                                <td><a (click)="removeExternalFirm(externalFirm.id)"><i class="fa fa-minus-circle removeUserIcon"></i></a></td>
+                                <td><a (click)="getFirmById(externalFirm.id)"><i class="fa fa-pencil-square pen" aria-hidden="true"></i>
+                            </a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button mat-raised-button class="add-firm-btn" (click)="openCreateExternalFirmDialog()">Nieuw</button>
+                </div>
+            </div>
+        </div>
+        <!------------------------------------------------------------------ End External Firms ------------------------------------------------------------------------------->
+        <!------------------------------------------------------------------ Category ------------------------------------------------------------------------------->
+        <div *ngIf="authService.isAdmin" class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <i class="fa fa-list users-icon" aria-hidden="true"></i> <span>Categorieën</span>
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+
+                    <mat-action-list *ngFor='let c of Categories'>
+                        <button mat-list-item (click)=[addCategory(c)]>
+                            <i class="fas fa-edit EditAdminIcon mr-2"></i>
+                            <a>{{c.department}}</a>
+                        </button>
+                    </mat-action-list>
+
+
+                    <button (click)='newCategory()' class='btn category ml-2 mt-2'>Nieuw</button>
+                </div>
+            </div>
+        </div>
+        <!------------------------------------------------------------------ End Category ------------------------------------------------------------------------------->
+
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <i class="fa fa-folder-o users-icon" aria-hidden="true"></i> <span>Meldingen sjablonen</span>
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <div class="card-body"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingSix">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                      <i class="fa fa-bell users-icon" aria-hidden="true"></i> Notificatiebeheer
+                  </button>
+                </h5>
+            </div>
+            <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="tr">
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <mat-list role="list">
+                                    <mat-list-item role="listitem" *ngFor="let x of notificationChoice; let i = index">
+                                        <mat-radio-button color="warn" [checked]="i == defaultSelected" [value]="i" (change)="selection = $event.value">
+                                            {{x}}
+                                        </mat-radio-button>
+                                    </mat-list-item>
+                                </mat-list>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class='btn category ml-2 mt-2' (click)='changeNotif(selection)'>Opslagen</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!------------------------------------------------------------------ Emergency Contact ------------------------------------------------------------------------------->
+        <div class="card" *ngIf="authService.isAdmin">
+            <div class="card-header" id="headingFive">
+                <h5 class="mb-0">
+                    <button id="addContact" class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  <i class="fa fa-id-card" aria-hidden="true"></i> <span>Noodcontacten</span>
+                  </button>
+                </h5>
+            </div>
+
+            <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                <div class="card-body">
+
+                    <div [hidden]='newInnerWidth <  500'>
+                        <mat-accordion>
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Facilitaire diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="3" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of facilitaireContacts">
+                                            <mat-card class="dashboard-card">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        ICT diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="3" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of ictContacts">
+                                            <mat-card class="dashboard-card">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Logistieke diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="3" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of logistiekContacts">
+                                            <mat-card class="dashboard-card">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Herstellingen didactisch diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="3" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of didactischContacts">
+                                            <mat-card class="dashboard-card">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+
+                    <!-- Alleen op mobile -->
+
+                    <div [hidden]='newInnerWidth > 500'>
+                        <mat-accordion>
+                            <mat-expansion-panel style="width: 302px; margin-left: -13px;">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Facilitaire diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="1" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of facilitaireContacts">
+                                            <mat-card class="dashboard-card" style="width: 290px;height: 200px; padding: 1px; margin-left: 0;">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel style="width: 302px; margin-left: -13px;">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        ICT diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="1" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of ictContacts">
+                                            <mat-card class="dashboard-card" style="width: 290px;height: 200px; padding: 1px; margin-left: 0;">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel style="width: 302px; margin-left: -13px;">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Logistieke diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="1" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of logistiekContacts">
+                                            <mat-card class="dashboard-card" style="width: 290px;height: 200px; padding: 1px; margin-left: 0;">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+
+                            <mat-expansion-panel style="width: 302px; margin-left: -13px;">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        Herstellingen didactisch diensten
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                <form>
+                                    <mat-grid-list cols="1" rowHeight="250px">
+                                        <mat-grid-tile *ngFor="let item of didactischContacts">
+                                            <mat-card class="dashboard-card" style="width: 290px;height: 200px; padding: 1px; margin-left: 0;">
+                                                <div><i (click)="getContactById(item.id)" class="fas fa-pencil"></i><span></span></div>
+                                                <div><i (click)="deleteContact(item.id)" class="fas fa-trash"></i><span></span></div>
+                                                <mat-card-header>
+                                                    <mat-card-title>
+                                                        <div>{{item.name}}</div>
+                                                        <div class="description">{{item.description}}</div>
+                                                    </mat-card-title>
+                                                </mat-card-header>
+                                                <mat-card-content style="padding: 15px;">
+                                                    <div>
+                                                        <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                                                        <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                                                        <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                                                    </div>
+                                                </mat-card-content>
+                                            </mat-card>
+                                        </mat-grid-tile>
+                                    </mat-grid-list>
+                                </form>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </div>
+                    <button mat-raised-button class="add-contact-btn" (click)="openAddContactDialog()">Nieuw</button>
+
+
+
+                </div>
+            </div>
+        </div>
+        <!------------------------------------------------------------------ Emergency Contact ------------------------------------------------------------------------------->
+
+
+        <!--------------------------------------------------------------------- Mail Template -------------------------------------------------------------------------------->
+        <div class="card" *ngIf="authService.isAdmin">
+            <div class="card-header" id="headingSeven" *ngIf="authService.isAdmin">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                  <i class="fa fa-envelope-open"></i><span>Email sjabloon</span>
+                  </button>
+                </h5>
+            </div>
+            <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
+                <div class="card-body" *ngFor="let template of templates">
+                    <i style="z-index: 100; position: relative;margin:30px;" class="fa fa-pencil" (click)="getTemplateById(template.id)"></i>
+                    <app-mail-template></app-mail-template>
+                </div>
+                <i [hidden]="templates.length > 0" (click)="openAddMailTemplate()" class="fa fa-plus-circle"></i>
+            </div>
+        </div>
+        <br/>
+        <!--------------------------------------------------------------------- Mail Template -------------------------------------------------------------------------------->
+
+    </div>
+</div>

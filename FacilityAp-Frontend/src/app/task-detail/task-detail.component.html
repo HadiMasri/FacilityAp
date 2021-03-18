@@ -1,0 +1,395 @@
+<div class="container" *ngIf='isLoaded'>
+    <!-- Desktop -->
+    <div class="row desktop" [hidden]='newInnerWidth < 500'>
+        <!-- Algemeen -->
+        <div id='general' class="col-4">
+            <h4>{{order.title}}</h4>
+            <p>{{order.campus}} {{order.location}} <span id='closeTo' *ngIf='order.closeTo'>(In de buurt)</span></p>
+
+            <div id='info-top'>
+                <span id='category'>{{order.category}}</span>
+            </div>
+
+            <div id="info-bottom">
+                <div class="info-bottom-user">
+                    <p><span class="material-icons">account_circle</span>{{order.requesterName}}</p>
+                    <p><span class="material-icons">alarm</span>{{order.createdOn}}</p>
+                    <!-- <p><span class="material-icons">build</span>{{order.assignTo.name}}</p>
+                    <p><span class="col-xs-10" *ngIf="order.assignToFirm">build</span>{{order.assignToFirm.displayName}}</p> -->
+                    <div class="p-0 m-2 row">
+                        <mat-icon class="col-xs-2" style='font-size: 18px;'>build</mat-icon>
+                        <p id="assignTo"><span class="col-xs-10">{{order.assignTo.name}}</span></p>
+                        <p id="assignToFirm"><span class="col-xs-10" *ngIf="order.assignToFirm">{{order.assignToFirm.displayName}}</span></p>
+                    </div>
+                </div>
+                <button *ngIf="!authService.isExternalFirm" class=" btn btn-aanuleren col-xs-8" (click)="onCancleOrder()">Annuleren</button>
+            </div>
+
+            <div *ngFor='let s of order.statusHistory.reverse()' class="status">
+                <h5>Statuswijziging</h5>
+                <p>{{s}}</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="col-4">
+            <mat-tab-group class="mat-tab-web" #tabGroup (selectedTabChange)="handleMatTabChange($event)" [selectedIndex]='selectedIndex'>
+                <mat-tab label='Beschrijving' *ngIf="!authService.isExternalFirm">
+                    <p class='mt-2'>{{order.description}}</p>
+                </mat-tab>
+                <mat-tab label='Reacties' *ngIf="!authService.isExternalFirm">
+
+                    <div class="CommentDiv">
+
+                        <div class="commentInfo" *ngFor='let c of comments; let i = index'>
+                            <h6 style="display: inline;">{{c.createdByName}}</h6>&nbsp;<span class="datum"> {{c.createdOn}}</span>
+
+                            <p style="height: auto;  word-wrap:break-word;">{{c.text }}</p>
+
+                            <textarea #content (keyup)="onChangeComment(content.value)" class="updateTextArea" *ngIf="isEditMode && i === CommentIndex" matInput>{{c.text}}</textarea>
+                            <span *ngIf='c.createdById === UserID && !isEditMode' (click)="edit(i)"><mat-icon  class="icons" >edit</mat-icon> &nbsp;</span>
+                            <span (click)="delete(i)" *ngIf='c.createdById === UserID && !isEditMode'> <mat-icon class="icons" >delete_outline</mat-icon></span>
+                            <span (click)="update(i)" *ngIf="isEditMode && i === CommentIndex"> <mat-icon class="icons">save</mat-icon></span>
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <mat-form-field class="form-field">
+                            <textarea [(ngModel)]="CommentText" matInput placeholder="Reactie"></textarea>
+                        </mat-form-field>
+                        <div class="send-btn" (click)="addComment()">
+                            <mat-icon>send</mat-icon>
+                        </div>
+
+                    </div>
+                </mat-tab>
+
+                <mat-tab label='Wijzigen' *ngIf="!authService.isExternalFirm">
+                    <form #updateForm='ngForm'>
+                        <div class="form-group">
+                            <label id='title' for="title">Titel</label>
+
+                            <input #title="ngModel" [(ngModel)]="order.title" type="text" class="form-control" id="title" name="title" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$" />
+                            <div class="alert alert-danger" *ngIf="title.invalid && (title.dirty || title.touched)">Titel is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateForm.controls.title?.errors?.pattern  ">U kan niet start met spatie of met teken of nummer</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Beschrijving</label>
+                            <textarea #description="ngModel" [(ngModel)]="order.description" type="text" class="form-control" id="description" name="description" row="3" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$"></textarea>
+                            <div class="alert alert-danger" *ngIf="description.invalid && (description.dirty || description.touched)">Beschrijving is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateForm.controls.description?.errors?.pattern  ">U kan niet start met spatie of met teken of nummer</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="campus col-md-4">Campus</label>
+                            <select #campus="ngModel" [(ngModel)]="order.campus" name="campus" id="campus" class="form-control" required (change)="onCampusChange($event)">
+                               <option *ngFor="let key of campusenOption"  [value]="key" [label]="key">{{key}}</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="floor">Verdieping</label>
+                            <select #floor="ngModel" [(ngModel)]="order.floor" id="floor" name="floor" class="form-control" required (change)="onEtageChange($event)">
+                                <option  *ngFor="let f of floors" [value]="f">{{f}}</option>
+                            </select>
+                            <div class="alert alert-danger" *ngIf="floor.invalid && (floor.dirty || floor.touched)">Verdieping is verplicht.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location col-md-7">Lokaal</label>
+                            <select #location="ngModel" [(ngModel)]="order.location" id="location" name="location" class="form-control" required>
+                              <option  *ngFor="let l of locaties" [value]="l">{{l}}</option>
+                          </select>
+                            <div class="alert alert-danger" *ngIf="location.invalid && (location.dirty || location.touched)">Lokaal is verplicht.</div>
+                            <input [checked]='order.closeTo' (change)='order.closeTo = !order.closeTo' type='checkbox' class='form-check-input ml-1' id='closeToCheck' />
+                            <label class='form-check-label ml-4' for='closeToCheck'>In de buurt</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date col-md-7">Datum</label>
+                            <input #date="ngModel" [(ngModel)]="order.date" type="date" class="form-control" id="date" name="date" required/>
+                            <div class="alert alert-danger" *ngIf="date.invalid && (date.dirty || date.touched)">Datum is verplicht.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time,e col-md-7">Tijd</label>
+                            <input #time="ngModel" [(ngModel)]="order.time" type="time" class="form-control" id="time" name="time" required/>
+                            <div class="alert alert-danger" *ngIf="time.invalid && (time.dirty || time.touched)">Tijd is verplicht.</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="department">Departement</label>
+                                <select #department="ngModel" [(ngModel)]="order.categoryDepartment" id="department" name="department" class="form-control" placeholder="kies een afdeling" required>
+                        <option selected disabled>kiezen...</option>
+                        <option  *ngFor="let d of departments" [value]="d">{{d}}</option>
+
+                       </select>
+                                <div class="alert alert-danger" *ngIf="department.invalid && (department.dirty || department.touched)">Departement is verplicht.</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="categorie">Categorie</label>
+                                <select #category="ngModel" [(ngModel)]="order.category" id="categorie" name="categorie" class="form-control" required placeholder="kies een afdeling">
+                        <option selected disabled>kiezen...</option>
+                          <option  *ngFor="let c of Categories" [value]="c">{{c}}</option>
+
+                    </select>
+                                <div class="alert alert-danger" *ngIf="category.invalid && (category.dirty || category.touched)">Categorie is verplicht.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status,e col-md-7">Status</label>
+                            <input #status="ngModel" [(ngModel)]="order.status" (change)="onStatusChange($event.target.value)" type="text" class="form-control" id="status" name="status" readonly/>
+                            <div class="alert alert-danger" *ngIf="status.invalid && (status.dirty || status.touched)">Status is verplicht.</div>
+                        </div>
+
+                        <button id='confirm' (click)="updateOrder()" class="btn" [disabled]=" !updateForm.valid  || order.requesterId !== LogedInUser">Wijzigen</button>
+                    </form>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isLogistiekeCoordinator || authService.isFacilitaireCoordinator || !authService.isExternalFirm" label='Toewijzen'>
+                    <div id="medewerker" [hidden]="order.assignToFirm.displayName !== null">
+                        <select (change)="onChange($event)" name="employee" id="employee" class="form-control mt-2">
+                        <option selected="true" disabled="disabled">Kies medewerker.</option>
+                        <option *ngFor="let employee of employeesList" [value]="employee.id" [label]="employee.name">{{employee.name}}</option>
+                    </select>
+
+                        <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedUserInformation()">Medewerker Toewijzen</button>
+                    </div>
+                    <br>
+                    <br>
+                    <div id="externe" [hidden]="order.assignTo.name !== null">
+                        <select [(ngModel)]="selectedFirm" (change)="onFirmChange()" name="firm" id="firm" class="form-control mt-2">
+                      <option selected="true" disabled="disabled">Kies firma</option>
+                      <option *ngFor="let firm of firmList" [ngValue]="firm">{{firm.displayName}}</option>
+                  </select>
+
+                        <div *ngFor="let template of templates">
+                            <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedFirmInformation(); getTemplateById(template.id)">Firma toewijzen</button>
+                        </div>
+                    </div>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isLogistiekeMedewerker || authService.isExternalFirm" label='Statussen'>
+                    <p class='m-0 pt-1 pb-1'>Status wijzigen</p>
+
+                    <form #updateForm="ngForm" class='mb-1'>
+                        <select #status="ngModel" [(ngModel)]="order.status" id="status" name="status" class="form-control" required>
+                          <option  *ngFor="let s of statusenOption" [value]="s">{{s}}</option>
+                          <div class="alert alert-danger" *ngIf="status.invalid && (status.dirty || status.touched)">Status is verplicht.</div>
+                      </select>
+
+                        <button id='confirm' (click)="updateOrder()" class="btn mt-2">Wijzigen</button>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <div id="return" (click)='goBack()'>
+            <i class="fa fa-undo m-2" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <!-- Mobile -->
+    <div class="row" [hidden]='newInnerWidth >= 500'>
+
+        <!-- Algemeen foto -->
+        <main style="background-image: url('../../assets/images/detail1.jpg')" alt="image">
+            <div class="info-mobile">
+                <h4>{{order.title}}</h4>
+                <p>{{order.campus}} {{order.location}} <span *ngIf='order.closeTo'>(In de buurt)</span></p>
+            </div>
+        </main>
+
+        <div id='info-top' class='p-3'>
+            <span id='category'>{{order.category}}</span>
+        </div>
+
+        <div id="info-bottom-mobile" class='p-3'>
+            <div class="info-bottom-user">
+                <p><span class="material-icons">account_circle</span>{{order.requesterName}}</p>
+                <p><span class="material-icons">alarm</span>{{order.createdOn}}</p>
+                <div class="p-0 m-2 row">
+                    <mat-icon class="col-xs-2" style='font-size: 18px;'>build</mat-icon>
+                    <span class="col-xs-10">{{order.assignTo.name}}</span>
+                    <span class="col-xs-10" *ngIf="order.assignToFirm">{{order.assignToFirm.displayName}}</span>
+                </div>
+            </div>
+
+            <div style="width: 150px;">
+
+                <mat-icon class="cancleIcon-mobile" (click)="onCancleOrder()">cancel</mat-icon>
+            </div>
+
+        </div>
+
+        <div id="tab-mobile" class="col-11">
+            <mat-tab-group #tabGroup2 (selectedTabChange)="handleMatTabChange($event)" [selectedIndex]='selectedIndex'>
+                <mat-tab label='Beschrijving' *ngIf="!authService.isExternalFirm">
+                    <p class='mt-2'>{{order.description}}</p>
+                </mat-tab>
+                <mat-tab label='Reacties' *ngIf="!authService.isExternalFirm">
+                    <div class="CommentDiv-mobile">
+
+                        <div class="commentInfo" *ngFor='let c of comments; let i = index'>
+                            <h6 style="display: inline;">{{c.createdByName}}</h6>&nbsp;<span class="datum"> {{c.createdOn}}</span>
+
+                            <p style="height: auto;  word-wrap:break-word;">{{c.text }}</p>
+
+                            <textarea #content (keyup)="onChangeComment(content.value)" class="updateTextArea" *ngIf="isEditMode && i === CommentIndex" matInput>{{c.text}}</textarea>
+                            <span *ngIf='c.createdById === UserID && !isEditMode' (click)="edit(i)"><mat-icon  class="icons" >edit</mat-icon> &nbsp;</span>
+                            <span (click)="delete(i)" *ngIf='c.createdById === UserID && !isEditMode'> <mat-icon class="icons" >delete_outline</mat-icon></span>
+                            <span (click)="update(i)" *ngIf="isEditMode && i === CommentIndex"> <mat-icon class="icons">save</mat-icon></span>
+
+
+                        </div>
+                    </div>
+                    <div>
+                        <mat-form-field class="form-field-mobile">
+                            <textarea [(ngModel)]="CommentText" matInput placeholder="Reactie"></textarea>
+                        </mat-form-field>
+                        <div class="send-btn" (click)="addComment()">
+                            <mat-icon>send</mat-icon>
+                        </div>
+                    </div>
+
+
+
+                </mat-tab>
+
+                <mat-tab label='Wijzigen' *ngIf="!authService.isExternalFirm">
+                    <form #updateForm='ngForm'>
+                        <div class="form-group">
+                            <label id='lblTitle' for="title">Titel</label>
+
+                            <input #title="ngModel" [(ngModel)]="order.title" type="text" class="form-control" id="title" name="title" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$" />
+                            <div class="alert alert-danger" *ngIf="title.invalid && (title.dirty || title.touched)">Titel is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateForm.controls.title?.errors?.pattern  ">U kan niet start met spatie of met teken of nummer</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Beschrijving</label>
+                            <textarea #description="ngModel" [(ngModel)]="order.description" type="text" class="form-control" id="description" name="description" row="3" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$"></textarea>
+                            <div class="alert alert-danger" *ngIf="description.invalid && (description.dirty || description.touched)">Beschrijving is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateForm.controls.description?.errors?.pattern  ">U kan niet start met spatie of met teken of nummer</div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="campus col-md-4">Campus</label>
+                            <select #campus="ngModel" [(ngModel)]="order.campus" name="campus" id="campus" class="form-control" required (change)="onCampusChange($event)">
+                                 <option *ngFor="let key of campusenOption"  [value]="key" [label]="key">{{key}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="floor">Verdieping</label>
+                            <select #floor="ngModel" [(ngModel)]="order.floor" id="floor" name="floor" class="form-control" required (change)="onEtageChange($event)">
+                                  <option  *ngFor="let f of floors" [value]="f">{{f}}</option>
+                              </select>
+                            <div class="alert alert-danger" *ngIf="floor.invalid && (floor.dirty || floor.touched)">Verdieping is verplicht.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location col-md-7">Lokaal</label>
+                            <select #location="ngModel" [(ngModel)]="order.location" id="location" name="location" class="form-control" required>
+                            <option  *ngFor="let l of locaties" [value]="l">{{l}}</option>
+                        </select>
+                            <div class="alert alert-danger" *ngIf="location.invalid && (location.dirty || location.touched)">Lokaal is verplicht.</div>
+                            <input [checked]='order.closeTo' (change)='order.closeTo = !order.closeTo' type='checkbox' class='form-check-input ml-1' id='closeToCheck' />
+                            <label class='form-check-label ml-4' for='closeToCheck'>In de buurt</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="date col-md-7">Datum</label>
+                            <input #date="ngModel" [(ngModel)]="order.date" type="date" class="form-control" id="date" name="date" required/>
+                            <div class="alert alert-danger" *ngIf="date.invalid && (date.dirty || date.touched)">Datum is verplicht.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="time,e col-md-7">Tijd</label>
+                            <input #time="ngModel" [(ngModel)]="order.time" type="time" class="form-control" id="time" name="time" required/>
+                            <div class="alert alert-danger" *ngIf="time.invalid && (time.dirty || time.touched)">Tijd is verplicht.</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="department">Departement</label>
+                                <select #department="ngModel" [(ngModel)]="order.categoryDepartment" id="department" name="department" class="form-control" required placeholder="kies een afdeling">
+                      <option selected disabled>kiezen...</option>
+                      <option  *ngFor="let d of departments" [value]="d">{{d}}</option>
+
+                     </select>
+                                <div class="alert alert-danger" *ngIf="department.invalid && (department.dirty || department.touched)">Departement is verplicht.</div>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="categorie">Categorie</label>
+                                <select #category="ngModel" [(ngModel)]="order.category" id="categorie" name="categorie" class="form-control" required placeholder="kies een afdeling">
+                      <option selected disabled>Kiezen...</option>
+                        <option  *ngFor="let c of Categories" [value]="c">{{c}}</option>
+
+                  </select>
+                                <div class="alert alert-danger" *ngIf="category.invalid && (category.dirty || category.touched)">Categorie is verplicht.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status,e col-md-7">Status</label>
+                            <input #status="ngModel" [(ngModel)]="order.status" (change)="onStatusChange($event.target.value)" type="text" class="form-control" id="status" name="status" readonly/>
+                            <div class="alert alert-danger" *ngIf="status.invalid && (status.dirty || status.touched)">Status is verplicht.</div>
+                        </div>
+
+
+                        <button id='confirm' (click)="updateOrder()" [disabled]=" !updateForm.valid  || order.requesterId !== LogedInUser" class="btn">Wijzigen</button>
+                    </form>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isLogistiekeCoordinator" label='Toewijzen'>
+                    <div id="medewerker" [hidden]="order.assignToFirm.displayName !== null">
+                        <select (change)="onChange($event)" name="employee" id="employee" class="form-control mt-2">
+                        <option selected="true" disabled="disabled">Kies medewerker.</option>
+                        <option *ngFor="let employee of employeesList" [value]="employee.id" [label]="employee.name">{{employee.name}}</option>
+                    </select>
+
+                        <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedUserInformation()">Medewerker Toewijzen</button>
+                    </div>
+                    <br>
+                    <br>
+                    <div id="externe" [hidden]="order.assignTo.name !== null">
+                        <select [(ngModel)]="selectedFirm" (change)="onFirmChange()" name="firm" id="firm" class="form-control mt-2">
+                      <option selected="true" disabled="disabled">Kies firma</option>
+                      <option *ngFor="let firm of firmList" [ngValue]="firm">{{firm.displayName}}</option>
+                  </select>
+
+                        <div *ngFor="let template of templates">
+                            <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedFirmInformation(); getTemplateById(template.id)">Firma toewijzen</button>
+                        </div>
+                    </div>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isLogistiekeCoordinator || authService.isExternalFirm" label='Statussen'>
+
+                    <p class='m-0 pt-1 pb-1'>Status wijzigen</p>
+
+                    <form #updateForm="ngForm" class='mb-1'>
+                        <select #status="ngModel" [(ngModel)]="order.status" id="status" name="status" class="form-control" required>
+                           <option  *ngFor="let s of statusenOption" [value]="s">{{s}}</option>
+                             <!-- <div class="alert alert-danger" *ngIf="status.invalid && (status.dirty || status.touched)">Categorie is required</div> -->
+                        </select>
+                        <br/>
+                        <button (click)="updateOrder()" id='confirm' class="btn mt-2">Wijzigen</button>
+                    </form>
+
+                    <div *ngFor='let s of order.statusHistory' class="status mb-1">
+                        <h5>Statuswijziging</h5>
+                        <p>{{s}}</p>
+                    </div>
+                    <span class=" mb-3 d-block "></span>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <div id="return " (click)='goBack()'>
+            <i class="fa fa-undo m-2 " aria-hidden="true "></i>
+        </div>
+    </div>
+</div>

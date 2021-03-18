@@ -1,0 +1,91 @@
+<div *ngIf="!editFirm">
+    <h2 class="headerText">Voeg een externe firma toe.</h2>
+    <form #externalFirmForm="ngForm">
+        <div class="form-group">
+            <div class="form-group">
+                <label class="name-lbl" for="Name">Naam</label>
+                <input #displayName="ngModel" tabindex="-1" name="displayName" id="displayName" [(ngModel)]="newExternalFirm.displayName" placeholder="Firma naam" class="form-control" type="text" required pattern="[a-zA-Z][a-zA-Z\s]*" />
+                <div class="alert alert-danger" *ngIf="
+            displayName.invalid && (displayName.dirty || displayName.touched)
+          ">
+                    Naam is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="externalFirmForm.controls.displayName?.errors?.pattern">
+                    Invalid naam.
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="email-lbl" for="Email">E-mailadres</label>
+                <input #email="ngModel" name="email" tabindex="-1" id="email" placeholder="E-mailadres" [(ngModel)]="newExternalFirm.email" [email]="newExternalFirm.email !== ''" class="form-control email-input" type="email" required />
+                <div class="alert alert-danger" *ngIf="email.errors && email.errors?.required && email.touched">
+                    E-mailadres is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="email.errors && email.errors?.email && email.touched">
+                    Gelieve een geldige e-mailadres in te geven.
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="telefoon-lbl" for="GSM">GSM Nr.</label>
+                <input #telefoonNr="ngModel" tabindex="-1" name="telefoonNr" id="telefoonNr" placeholder="BV :0465146800" [(ngModel)]="newExternalFirm.telefonNr" class="form-control" type="tel" required pattern="[0-9]{10}" />
+                <div class="alert alert-danger" *ngIf="telefoonNr.invalid && (telefoonNr.dirty || telefoonNr.touched)">
+                    GSM Nr. is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="externalFirmForm.controls.telefoonNr?.errors?.pattern">
+                    Invalid phone number.
+                </div>
+            </div>
+        </div>
+        <button class="btn" (click)="addFirm()" type="submit" [disabled]="!externalFirmForm.valid" mat-flat-button id="yes-button" [mat-dialog-close]="false">
+      Voeg toe
+    </button>
+        <button class="btn" mat-flat-button id="no-button" [mat-dialog-close]="false">
+      Annuleer
+    </button>
+    </form>
+</div>
+
+<div *ngIf="editFirm">
+    <h2 class="headerText">Externe firma wijzigen</h2>
+    <form #externalFirmForm="ngForm">
+        <div class="form-group">
+            <div class="form-group">
+                <label class="name-lbl" for="Name">Naam</label>
+                <input #displayName="ngModel" name="displayName" id="displayName" [(ngModel)]="externalFirm.displayName" placeholder="Firm Name" class="form-control" type="text" required pattern="[a-zA-Z][a-zA-Z\s]*" />
+                <div class="alert alert-danger" *ngIf="
+            displayName.invalid && (displayName.dirty || displayName.touched)
+          ">
+                    Naam is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="externalFirmForm.controls.displayName?.errors?.pattern">
+                    Invalid naam.
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="email-lbl" for="Email">E-mailadres</label>
+                <input #email="ngModel" name="email" placeholder="Email" id="email" [(ngModel)]="externalFirm.email" [email]="externalFirm.email !== ''" class="form-control email-input" type="email" required />
+                <div class="alert alert-danger" *ngIf="email.errors && email.errors?.required && email.touched">
+                    E-mailadres is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="email.errors && email.errors?.email && email.touched">
+                    Gelieve een geldige e-mailadres in te geven.
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="telefoon-lbl" for="GSM">GSM Nr.</label>
+                <input #telefoonNr="ngModel" name="telefoonNr" id="telefoonNr" placeholder="BV :0465146800" [(ngModel)]="externalFirm.telefonNr" class="form-control" type="tel" required pattern="[0-9]{10}" />
+                <div class="alert alert-danger" *ngIf="telefoonNr.invalid && (telefoonNr.dirty || telefoonNr.touched)">
+                    GSM Nr. is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="externalFirmForm.controls.telefoonNr?.errors?.pattern">
+                    Invalid phone number.
+                </div>
+            </div>
+        </div>
+        <button class="btn" (click)="updateFirm(externalFirm.id)" type="submit" mat-flat-button id="yes-button" [disabled]="!externalFirmForm.valid" [mat-dialog-close]="false">
+      Wijzig
+    </button>
+        <button class="btn" mat-flat-button id="no-button" [mat-dialog-close]="false">
+      Annuleer
+    </button>
+    </form>
+</div>

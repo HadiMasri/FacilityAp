@@ -1,0 +1,31 @@
+<div [hidden]="!isSubLoaded">
+            <div *ngIf='newInnerWidth >  500' class="header mt-3 mb-3">
+            </div>
+            <div class="mat-elevation-z8 mb-3 container">
+                <h1 class="header">Afgelopen defecten.</h1><br/>
+                <div *ngFor='let n of notifList' class="status mb-1">
+                    <h6>Het defect: <b>"{{n.title}}"</b> in lokaal <i>{{n.campus}} {{n.location}} </i> heeft een nieuwe status: <strong style="color:green;">{{n.status}}. 
+                    <button  mat-icon-button color="warn" (click)='removeNotification(n)'>
+                        <mat-icon>delete</mat-icon>
+                      </button> </strong> </h6>   
+                </div>
+                <br/>
+                <h1 class="header" [hidden]="!notification">Lopende defecten.</h1><br/>
+                <div *ngFor='let n of notifList2' class="status mb-1" [hidden]="!notification">
+                    <h6>Het defect: <b>"{{n.title}}"</b> in lokaal <i>{{n.campus}} {{n.location}} </i> heeft een nieuwe status: <strong style="color:green;">{{n.status}}. 
+                    </strong></h6>   
+            </div>
+            <br/>
+        </div>
+    </div>
+        <div [hidden]="isSubLoaded !== undefined" class="container">
+            <div class="spinner-border text-danger" role="status">
+                <span class="sr-only">Laden...</span>
+            </div>
+</div>
+<div [hidden]="isSubLoaded || isSubLoaded === undefined">
+    <div class="header-mobile">
+        <p> Er zijn geen Notificaties. </p>
+    </div>
+</div>
+

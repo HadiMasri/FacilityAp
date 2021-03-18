@@ -1,0 +1,343 @@
+<div class="ParentDiv container-fluid">
+
+    <mat-tab-group [hidden]="newInnerWidth < 500" #tabGroup (selectedTabChange)="handleMatTabChange($event)">
+
+        <mat-tab #Oversicht label="Defecten">
+            <div [hidden]="!isReportLoaded">
+                <div *ngIf='newInnerWidth >  500' class="header my-3">
+                    <h2 class="headerText">Gearchiveerde defecten</h2>
+                </div>
+
+                <div #TABLE class="mat-elevation-z8 mb-3 container">
+                    <br/>
+                    <mat-table id="ExampleTable" #table matTableFilter [dataSource]='dataSource ' [exampleEntity]="filterEntity" [filterType]="filterType" matSort>
+
+                        <!-- Title Column -->
+                        <ng-container matColumnDef="title">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Titel" [(ngModel)]="filterEntity.title">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let e">{{(e.title.length > 17 ) ? (e.title | slice:0:17) + '..' : (e.title)}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Category Column -->
+                        <ng-container matColumnDef="category">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Categorie" [(ngModel)]="filterEntity.category">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let e">{{(e.category.length > 17 ) ? (e.category | slice:0:17) + '..' : (e.category)}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Campus Column -->
+                        <ng-container matColumnDef="campus">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Campus" [(ngModel)]="filterEntity.campus">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let e">{{e.campus}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Location Column -->
+                        <ng-container matColumnDef="location">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Locatie" [(ngModel)]="filterEntity.location">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let e">{{e.location}} <span *ngIf='e.closeTo' class="ml-1">*</span></mat-cell>
+                        </ng-container>
+
+                        <!-- Status Column -->
+                        <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Status" [(ngModel)]="filterEntity.status">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let e">{{(e.status.length > 10 ) ? (e.status | slice:0:50) + '..' : (e.status)}}</mat-cell>
+                        </ng-container>
+
+
+                        <!-- Priority Column -->
+                        <ng-container matColumnDef="priority">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field (click)='toggleDisable()'>
+                                    <input matInput placeholder="Prioriteit" [disabled]='disableTextbox' readonly mat-sort-header>
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let e"><span class='dot-web' [ngStyle]="{'background-color': setPriorityColor(e.priority)}"></span></mat-cell>
+                        </ng-container>
+
+                        <!-- Upvote Column -->
+                        <ng-container matColumnDef="upVote">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field (click)='toggleDisable()'>
+                                    <input matInput placeholder="Stemmen" [disabled]='disableTextbox' readonly>
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let e">{{e.upVote}}</mat-cell>
+                        </ng-container>
+
+
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+
+                    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+                </div>
+
+            </div>
+
+
+            <div [hidden]="isReportLoaded !== undefined" class="container">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="sr-only">Laden...</span>
+                </div>
+            </div>
+
+            <div [hidden]="isReportLoaded || isReportLoaded === undefined">
+                <div class="header-mobile">
+                    <p> Er zijn geen resultaten </p>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab #Taken label="Taken">
+            <div [hidden]="!isOrdersLoaded">
+                <div *ngIf='newInnerWidth > 500' class="header my-3">
+                    <h2>Gearchiveerde taken</h2>
+                </div>
+                <div [hidden]='newInnerWidth <  500' class="mat-elevation-z8 mb-3 container">
+
+                    <mat-table matTableFilter [dataSource]="taskDataSource" [exampleEntity]="taskFilterEntity" [filterType]="filterType">
+
+                        <!-- Title Column -->
+                        <ng-container matColumnDef="title">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Titel" [(ngModel)]="taskFilterEntity.title">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let f">{{(f.title.length > 17 ) ? (f.title | slice:0:17) + '..' : (f.title)}}</mat-cell>
+                        </ng-container>
+
+
+                        <!-- Category Column -->
+                        <ng-container matColumnDef="category">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Categorie" [(ngModel)]="filterEntity.category">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let f">{{(f.category.length > 17 ) ? (f.category | slice:0:17) + '..' : (f.category)}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Campus Column -->
+                        <ng-container matColumnDef="campus">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Campus" [(ngModel)]="taskFilterEntity.campus">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let f">{{f.campus}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Location Column -->
+                        <ng-container matColumnDef="location">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Lokaal" [(ngModel)]="taskFilterEntity.location">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let f">{{f.location}} <span *ngIf='f.closeTo' class="ml-1">*</span></mat-cell>
+                        </ng-container>
+
+                        <!-- Status Column -->
+                        <ng-container matColumnDef="date">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Datum" [(ngModel)]="taskFilterEntity.date">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let f">{{f.date}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Time Column -->
+                        <ng-container matColumnDef="time">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Tijd" [(ngModel)]="taskFilterEntity.time">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let f">{{f.time}}</mat-cell>
+                        </ng-container>
+
+                        <!-- Status Column -->
+                        <ng-container matColumnDef="status">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-form-field>
+                                    <input matInput placeholder="Status" [(ngModel)]="taskFilterEntity.status">
+                                </mat-form-field>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let f">{{(f.status.length > 10 ) ? (f.status | slice:0:50) + '..' : (f.status)}}</mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="displayedTaskColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedTaskColumns;"></mat-row>
+                    </mat-table>
+                    <mat-paginator #taskPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                    <br/>
+                </div>
+            </div>
+
+            <div [hidden]="isOrdersLoaded !== undefined" class="container">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="sr-only">Laden...</span>
+                </div>
+            </div>
+            <div [hidden]="isOrdersLoaded || isOrdersLoaded === undefined" class="title-mobile mt-4">
+                <p>Er zijn geen resultaten.</p>
+            </div>
+        </mat-tab>
+
+
+    </mat-tab-group>
+
+    <!-- Alleen op mobile -->
+    <mat-tab-group [hidden]='newInnerWidth >  500' #tabGroup2 (selectedTabChange)="handleMatTabChange($event)">
+
+
+        <mat-tab label="Defecten">
+            <div [hidden]="!isReportLoaded">
+                <mat-form-field *ngIf='newInnerWidth <  500'>
+                    <mat-label>
+                        <mat-icon>search</mat-icon>
+                    </mat-label>
+                    <input matInput placeholder="zoek op locatie..." type="text" name="search" [(ngModel)]="searchText" autocomplete="off">
+                </mat-form-field>
+
+                <div [hidden]='newInnerWidth >  500' class='mb-3'>
+                    <div class="title-mobile">
+                        <p>Gearchiveerde defecten</p>
+                    </div>
+
+                    <mat-form-field class="dropsown">
+                        <mat-label class="dropDownLable">Sorteer op</mat-label>
+                        <mat-select [(ngModel)]="sortBy" name="col">
+                            <mat-option *ngFor="let col of columnsToSort" [value]="col.value" (click)="SortBy()">
+                                {{col.viewValue}}
+                                <i class="fas fa-arrow-up sortPile" *ngIf="direction === 'asc'"></i>
+                                <i class="fas fa-arrow-down sortPile" *ngIf="direction === 'desc'"></i>
+
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+                    <div *ngFor='let report of reports | filter: searchText | sortBy: direction:sortBy' class='card-view'>
+
+                        <section class="img">
+                            <img *ngIf='report.bytes === null' class="col-md-6" src="../../assets/images/default.jpg" alt="image">
+                            <img *ngIf='report.bytes !== null' class="col-md-6" src="data:image/jpeg;base64,{{report.bytes}}" alt="image">
+                        </section>
+
+                        <section class="description">
+                            <div class='card-head'>
+                                <h5>{{(report.title.length > 14 ) ? (report.title | slice:0:14) + '..' : (report.title)}}</h5>
+                                <span class='dot-mobile' [ngStyle]="{'background-color': setPriorityColor(report.priority)}"></span>
+                            </div>
+                            <p class='loc'>{{report.campus}} {{report.location}} <span *ngIf='report.closeTo' class="ml-1">*</span></p>
+                            <p>Status: {{(report.status.length > 10 ) ? (report.status | slice:0:14) + '..' : (report.status)}}</p>
+                            <label class="category">{{(report.category.length > 10 ) ? (report.category | slice:0:14) + '..' : (report.category)}}</label> &nbsp;
+                            <label id='stemmen'><i class="fas fa-thumbs-up stemmen-like"></i>{{report.upVote}}</label>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <div [hidden]="isReportLoaded !== undefined" class="header-mobile container">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="sr-only">Laden...</span>
+                </div>
+            </div>
+
+            <div class="title-mobile mt-4" [hidden]="isReportLoaded || isReportLoaded === undefined">
+                <p>Er zijn geen resultaten.</p>
+            </div>
+        </mat-tab>
+
+
+        <mat-tab label="Taken">
+
+            <div [hidden]="!isOrdersLoaded" style="height: 100%;">
+                <mat-form-field *ngIf='newInnerWidth <  500'>
+                    <mat-label>Filter</mat-label>
+                    <input matInput placeholder="zoek op locatie..." type="text" name="search" [(ngModel)]="searchText" autocomplete="off">
+                </mat-form-field>
+
+                <div [hidden]='newInnerWidth >  500'>
+                    <div class="title-mobile">
+                        <p>Gearchiveerde taken</p>
+                    </div>
+
+                    <mat-form-field class="dropsown">
+                        <mat-label class="dropDownLable">Sorteer op</mat-label>
+                        <mat-select [(ngModel)]="TasksortBy" name="col">
+                            <mat-option *ngFor="let col of TaskscolumnsToSort" [value]="col.value" (click)="SortBy()">
+                                {{col.viewValue}}
+                                <i class="fas fa-arrow-up sortPile" *ngIf="direction === 'asc'"></i>
+                                <i class="fas fa-arrow-down sortPile" *ngIf="direction === 'desc'"></i>
+
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                  
+                    <div *ngFor='let order of orders | filter: searchText | sortBy: direction:TasksortBy'>
+                        <div class="order-card">
+                            <section id="top">
+                                <span>
+                                    <h5 class="title"><b>{{ (order.title.length > 25 ) ? (order.title | slice:0:25)+'..':(order.title)}}</b></h5>
+                                    <p class='loc'>{{order.campus}}  {{order.location}} <span *ngIf='order.closeTo' class="ml-1">*</span></p>
+                                </span>
+
+                                <span class="font-weight-bold text-right">
+                                    {{order.date}}
+                                    <p>{{order.time}}</p>
+                                </span>
+                            </section>
+
+                            <label><b>Status:</b> {{order.status}}</label>
+                            <label class="category bottom">{{order.category}}</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div [hidden]="isOrdersLoaded !== undefined" class="header-mobile container">
+                <div class="spinner-border text-danger" role="status">
+                    <span class="sr-only">Laden...</span>
+                </div>
+            </div>
+
+
+            <div class="title-mobile mt-4" [hidden]="isOrdersLoaded || isOrdersLoaded === undefined">
+                <p>Er zijn geen resultaten.</p>
+            </div>
+
+        </mat-tab>
+    </mat-tab-group>
+
+
+    <div *ngIf='authService.isAdmin' id="download" (click)='exportData()'>
+        <i class="fa fa-download m-2"></i>
+    </div>
+</div>

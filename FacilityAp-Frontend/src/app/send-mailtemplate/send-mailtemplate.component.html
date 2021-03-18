@@ -1,0 +1,60 @@
+<div *ngIf="isLoaded">
+    <div *ngIf="isReport">
+        <form #templateForm="ngForm">
+            <i class="fa fa-times-circle" (click)="closeDialog()"></i>
+            <div class="form-group">
+                <h5 style="font-size: x-small; margin-bottom: 5px;">E-mail template Facility Tool</h5>
+                <!-- <textarea #body="ngModel" [(ngModel)]="template.body" type="text" class="form-control" id="body" name="body" row="3" required></textarea> -->
+
+                {{template.firmName}} <br><br> {{template.body}} <br><br>
+                <p id="hyperlink">Hyperlink: {{meldingUrl}}?token={{idToken}}</p> <br><br> {{template.signature}}
+            </div>
+            <div class="sendMail">
+                <mat-form-field>
+                    <mat-label>Kies een firm</mat-label>
+                    <mat-select [(ngModel)]="selectedFirm" (selectionChange)="onFirmChange($event)" name="firm" id="firm">
+                        <mat-option *ngFor="let firm of firmList" [value]="firm" live-data-search>
+                            {{firm.displayName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br>
+                <div class="assign">
+                    <div>
+                        <button [disabled]="!isFirmSelected" (click)="reportSendMail(); closeDialog()" *ngIf="assignToFirmInformation" name="selectedFirm" id="selectedFirm" ngDefaultControl class="btn">VERZENDEN</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div *ngIf="!isReport">
+        <form #templateForm="ngForm">
+            <i class="fa fa-times-circle" (click)="closeDialog()"></i>
+            <div class="form-group">
+                <h5 style="font-size: x-small; margin-bottom: 5px;">E-mail template Facility Tool</h5>
+                <!-- <textarea #body="ngModel" [(ngModel)]="template.body" type="text" class="form-control" id="body" name="body" row="3" required></textarea> -->
+
+                {{template.firmName}} <br><br> {{template.body}} <br><br>
+                <p id="hyperlink">Hyperlink: {{taakUrl}}?token={{idToken}}</p> <br><br> {{template.signature}}
+            </div>
+            <div class="sendMail">
+                <mat-form-field>
+                    <mat-label>Kies een firm</mat-label>
+                    <mat-select [(ngModel)]="selectedFirm" (selectionChange)="onFirmChange($event)" name="firm" id="firm">
+                        <mat-option *ngFor="let firm of firmList" [value]="firm" live-data-search>
+                            {{firm.displayName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <br>
+                <div class="assign">
+                    <div>
+                        <button [disabled]="!isFirmSelected" (click)="orderSendMail(); closeDialog()" *ngIf="assignToFirmInformation" name="selectedFirm" id="selectedFirm" ngDefaultControl class="btn">VERZENDEN</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

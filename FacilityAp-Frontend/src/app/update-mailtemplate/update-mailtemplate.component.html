@@ -1,0 +1,12 @@
+<div *ngIf="isLoaded">
+    <form #templateForm="ngForm">
+        <i class="fa fa-times-circle" (click)="closeDialog()"></i>
+        <div class="form-group">
+
+            <textarea #body="ngModel" [(ngModel)]="template.body" type="text" class="form-control" id="body" name="body" required style="height: 400px;"></textarea>
+
+
+        </div>
+        <i class="fa fa-save" (click)="updateTemplate()"></i>
+    </form>
+</div>

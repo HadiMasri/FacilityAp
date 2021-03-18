@@ -1,0 +1,195 @@
+.user-Selector {
+    margin-bottom: 20px;
+}
+
+.group-Selector {
+    margin-bottom: 20px;
+}
+
+.member-btn {
+    margin: 10px;
+}
+
+.container {
+    width: 100% !important;
+}
+
+.btn-link {
+    color: black;
+    text-decoration: none;
+}
+
+.users-icon {
+    color: #af0412;
+    font-size: 18px;
+    margin-right: 20%;
+}
+
+.user-edit {
+    color: #af0412;
+    font-size: 25px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.AdminLable {
+    margin-left: 10px;
+}
+
+.EditAdminIcon {
+    font-style: normal;
+    font-weight: bold;
+    color: #af0412;
+    cursor: pointer;
+}
+
+.category {
+    background-color: #af0412;
+    color: white;
+}
+
+.add-firm-btn{
+    background-color: #af0412;
+    margin-left: 5%;
+    color: white;
+  }
+
+.removeUserIcon {
+    color: #af0412;
+    font-size: 25px;
+    cursor: pointer;
+  }
+
+.pen{
+  font-size: 25px;
+  cursor: pointer;
+  color: #af0412;
+}
+.detailsIcon {
+  color: #af0412;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+
+
+/* Emergency settings */
+mat-card-content div {
+  padding-bottom: 10px;
+  padding-right: 10px;
+  font-size: medium;
+}
+
+.mat-card-content span {
+  padding-left: 10px;
+}
+
+.building{
+  color: #af0412;
+  font-size: 25px;
+  margin-right: 20%;
+}
+
+.mat-card-content a {
+  text-decoration: none;
+  color: black;
+}
+
+.description {
+  font-size: xx-small;
+  border-bottom: 1px solid #af0412;
+}
+
+.fa-paper-plane {
+  color: #af0412;
+  font-size: 20px;
+  font-style: normal;
+}
+
+.fa-phone-square {
+  color: #af0412;
+  font-size: 20px;
+  font-style: normal;
+}
+
+.fa-mobile {
+  color: #af0412;
+  font-size: 30px;
+  font-style: normal;
+  padding-left: 2.5px;
+}
+
+.dashboard-card {
+  width: 280px;
+  height: 200px;
+  padding: 1px;
+  margin-left: -15px;
+}
+
+.fa-pencil {
+  float: right;
+  color: #af0412;
+  font-size: 20px;
+  font-style: normal;
+  padding: 5px;
+  padding-right: 15px;
+}
+
+.fa-id-card {
+  color: #af0412;
+  font-size: 20px;
+  padding-right: 20px;
+}
+
+
+.fa-trash {
+  float: right;
+  color: #af0412;
+  font-size: 20px;
+  font-style: normal;
+  padding: 5px;
+}
+
+
+.add-contact-btn {
+  margin-left: 0;
+  background: #af0412;
+  color: white;
+  margin-top: 10px;
+}
+
+/* Mail Template */
+.fa-envelope-open {
+  color: #af0412;
+  font-size: 20px;
+  padding-right: 28px;
+}
+
+.template {
+  display: inline-block;
+  background: #e0e0e0;
+  padding: 0 12px;
+  border-radius: 32px;
+}
+
+/* .mail-card {
+  bottom: 20px;
+} */
+
+.mail-card #editTemplate {
+  margin-top: 40px;
+  margin-right: -20px;
+}
+
+.mail-card p {
+  padding-bottom: .01px;
+}
+
+.fa-plus-circle {
+  font-size: 27px;
+  color: #af0412;
+  padding: 10px;
+}

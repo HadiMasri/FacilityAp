@@ -1,0 +1,55 @@
+<div fxFlex>
+
+    <mat-sidenav-container class="navContainer" fxFill>
+        <mat-sidenav #sidenav class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" mode="push">
+
+            <div class="toolbarheader">
+                <div class="row rowDiv">
+                    <div class="col-xs-3">
+                        <span style="font-size: 40px;color:white" class="material-icons">account_circle</span>
+                    </div>
+                    <div class="col-xs-9">
+                        <h5 class="userName">{{userName}}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <mat-nav-list>
+
+                <a mat-list-item [routerLink]="['/']" (click)="setTitle('Overzicht')" (click)="sidenav.toggle()">
+                    <mat-icon>details</mat-icon> &nbsp;Overzicht</a>
+
+                <a *ngIf="!authService.isLogistiekeCoordinator && !authService.isLogistiekeMedewerker" mat-list-item [routerLink]="['/mijn-meldingen']" (click)="setTitle( 'Mijn Defecten' )" (click)="sidenav.toggle()">
+                    <mat-icon>bug_report</mat-icon> &nbsp; Mijn Defecten</a>
+                <a *ngIf="!authService.isFacilitaireCoordinator && !authService.isFacilitaireMedewerker && !authService.isMedewerker" mat-list-item [routerLink]="['/mijn-taken']" (click)="setTitle( 'Mijn Taken' )" (click)="sidenav.toggle()">
+                    <mat-icon>assignment</mat-icon>&nbsp; Mijn Taken</a>
+                <a mat-list-item [routerLink]="['/notificaties']" (click)="setTitle( 'Notificaties' )" (click)="sidenav.toggle()">
+                    <mat-icon [matBadge]="notifList?.length" matBadgeColor="warn" [matBadgeHidden]="notifList?.length < 1">alarm_on</mat-icon> &nbsp; Notificaties</a>
+                <a mat-list-item [routerLink]="['/archief']" (click)="setTitle( 'Archief' )" (click)="sidenav.toggle()">
+                    <mat-icon>archive</mat-icon>&nbsp; Archief</a>
+                <a mat-list-item [routerLink]="['/noodgeval']" (click)="setTitle( 'Noodgeval' )" (click)="sidenav.toggle()">
+                    <mat-icon>settings_phone</mat-icon> &nbsp; Noodgeval
+                </a>
+                <a mat-list-item [routerLink]="['/instellingen']" (click)="setTitle( 'Instellingen' )" (click)="sidenav.toggle()">
+                    <mat-icon>build</mat-icon> &nbsp; Instellingen</a>
+                <a mat-list-item href="https://login.microsoftonline.com/33d8cf3c-2f14-48c0-9ad6-5d2825533673/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:4200/" (click)="logout()">
+                    <!-- <a mat-list-item href="https://login.microsoftonline.com/33d8cf3c-2f14-48c0-9ad6-5d2825533673/oauth2/v2.0/logout?post_logout_redirect_uri=https://vps099.ap.be/" (click)="logout()"> -->
+                    <mat-icon>assignment_return</mat-icon> &nbsp; Uitloggen</a>
+
+            </mat-nav-list>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <mat-toolbar class="toolbar">
+                <!--This toggle button should be disabled if the user not authenticated -->
+                <button *ngIf="isLoggedIn() && !authService.isExternalFirm" class="togglebtn" mat-icon-button (click)="sidenav.toggle()">
+                <!-- <button class="togglebtn" mat-icon-button (click)="sidenav.toggle()"> -->
+                  <mat-icon>menu</mat-icon>
+                </button>
+                <span class="title">{{title}}</span>
+            </mat-toolbar>
+            <!-- Add Content Here -->
+            <!-- <ng-content></ng-content> -->
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>

@@ -1,0 +1,21 @@
+<div>
+    <span id='title'>{{category.department}}</span>
+
+    <form #categoryForm='ngForm' (ngSubmit)='addCategory()'>
+        <div class='input-group mt-1'>
+            <input #cat='ngModel' type="text" [(ngModel)]='newCategory' name='category' id='category' placeholder='Categorie...' class="form-control" required>
+            <input type="submit" class="btn red ml-1" value='Toevoegen' [disabled]='!categoryForm.valid'>
+        </div>
+    </form>
+
+    <hr>
+
+    <mat-selection-list #categories [(ngModel)]='selectedOptions'>
+        <mat-list-option *ngFor='let c of category.categories' [value]='c'>{{c}}</mat-list-option>
+    </mat-selection-list>
+
+    <button mat-flat-button class="btn red w-100 mt-1" [mat-dialog-close]="true" (click)='deleteCategory()' [disabled]='categories.selectedOptions.selected.length == 0'>Verwijderen</button>
+    <div class="text-center">
+        <span id='deleteCategory' (click)='deleteDepartment()'>Bovenstaande categorie verwijderen</span>
+    </div>
+</div>

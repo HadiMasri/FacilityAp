@@ -1,0 +1,38 @@
+mat-card-content div {
+  padding-bottom: 10px;
+  padding-right: 10px;
+  font-size: medium;
+}
+
+.mat-card-content span {
+  padding-left: 10px;
+}
+
+.mat-card-content a {
+  text-decoration: none;
+  color: black;
+}
+
+.description {
+  font-size: xx-small;
+  border-bottom: 1px solid #af0412;
+}
+
+.fa-paper-plane {
+  color: #af0412;
+  font-size: 20px;
+  font-style: normal;
+}
+
+.fa-phone-square {
+  color: #af0412;
+  font-size: 20px;
+  font-style: normal;
+}
+
+.fa-mobile {
+  color: #af0412;
+  font-size: 30px;
+  font-style: normal;
+  padding-left: 2.5px;
+}

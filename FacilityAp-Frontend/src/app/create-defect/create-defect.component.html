@@ -1,0 +1,114 @@
+<div class="container">
+    <div class="jumbotron">
+        <h2>Defect melden</h2>
+        <form #reportForm="ngForm">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="campus">Campus</label>
+                    <select #campus="ngModel" [(ngModel)]="report.campus" name="campus" id="campus" class="form-control" required (change)="onCampusChange($event)">
+            <option selected disabled>Kiezen...</option>
+            <option
+              *ngFor="let key of campusenOption"
+              [value]="key"
+              [label]="key"
+              >{{ key }}</option
+            >
+          </select>
+                    <div class="alert alert-danger" *ngIf="campus.invalid && (campus.dirty || campus.touched)">
+                        Campus is verplicht.
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="floor">Verdieping</label>
+                    <select #floor="ngModel" [(ngModel)]="report.floor" name="floor" id="floor" class="form-control" required (change)="onEtageChange($event)">
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let key of floors" [value]="key">{{ key }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="floor.invalid && (floor.dirty || floor.touched)">
+                        Verdieping is verplicht.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="locatie">Lokaal</label>
+                    <select #location="ngModel" [(ngModel)]="report.location" name="locatie" id="locatie" class="form-control" required>
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let key of locaties" [value]="key">{{
+              key
+            }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="location.invalid && (location.dirty || location.touched)">
+                        Lokaal is verplicht.
+                    </div>
+
+                    <input [checked]="report.closeTo" (change)="report.closeTo = !report.closeTo" type="checkbox" class="form-check-input ml-1" id="closeToCheck" />
+                    <label class="form-check-label ml-4" for="closeToCheck">In de buurt</label
+          >
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="department">Departement</label>
+                    <select #department="ngModel" [(ngModel)]="report.categoryDepartment" id="department" name="department" class="form-control" required (change)="onDepartmentChange($event)" placeholder="kies een afdeling">
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let d of departments" [value]="d">{{ d }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="
+              department.invalid && (department.dirty || department.touched)
+            ">
+                        Departement is verplicht.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="categorie">Categorie</label>
+                    <select #category="ngModel" [(ngModel)]="report.category" id="categorie" name="categorie" class="form-control" required placeholder="kies een afdeling">
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="category.invalid && (category.dirty || category.touched)">
+                        Categorie is verplicht.
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="title">Titel</label>
+                <input #title="ngModel" [(ngModel)]="report.title" type="text" class="form-control" id="title" name="title" placeholder="Titel" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$" />
+
+                <div class="alert alert-danger" *ngIf="title.invalid && (title.dirty || title.touched)">
+                    Titel is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="reportForm.controls.title?.errors?.pattern">
+                    U kan niet start met spatie of met teken of nummer
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="beschrijving">Beschrijving</label>
+                <textarea #description="ngModel" [(ngModel)]="report.description" class="form-control" id="beschrijving" name="beschrijving" rows="3" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$"></textarea>
+                <div class="alert alert-danger" *ngIf="
+            description.invalid && (description.dirty || description.touched)
+          ">
+                    Beschrijving is verplicht.
+                </div>
+
+                <div class="alert alert-danger" *ngIf="reportForm.controls.beschrijving?.errors?.pattern">
+                    U kan niet start met spatie of met teken of nummer
+                </div>
+            </div>
+
+            <div class="input-group mb-4">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="image" (change)="process($event)" />
+
+                    <label class="custom-file-label" for="image">{{ fileName }}</label>
+                </div>
+            </div>
+            <button (click)="createReport()" class="btn" [disabled]="!reportForm.valid">
+        Indienen
+      </button>
+        </form>
+    </div>
+
+    <div id="return" (click)="goBack()">
+        <i class="fa fa-undo m-2" aria-hidden="true"></i>
+    </div>
+</div>

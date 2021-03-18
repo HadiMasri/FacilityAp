@@ -1,0 +1,251 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>facility-tool-frontend documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">facility-tool-frontend documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content module">
+                   <div class="content-data">
+
+
+
+<ol class="breadcrumb">
+    <li>Modules</li>
+    <li>AppRoutingModule</li>
+</ol>
+
+
+<ul class="nav nav-tabs" role="tablist">
+    <li  class="active" >
+        <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+    </li>
+    <li >
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/app-routing.module.ts</code>
+        </p>
+
+
+
+
+        <div class="container-fluid module">
+            <div class="row">
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { NotFoundComponent } from &#x27;./not-found/not-found.component&#x27;;
+import { NgModule } from &#x27;@angular/core&#x27;;
+import { Routes, RouterModule } from &#x27;@angular/router&#x27;;
+import { AuthComponent } from &#x27;./auth/auth.component&#x27;;
+import { OverzichtComponent } from &#x27;./overzicht/overzicht.component&#x27;;
+import { MijnMeldingenComponent } from &#x27;./mijn-meldingen/mijn-meldingen.component&#x27;;
+import { MijnTakenComponent } from &#x27;./mijn-taken/mijn-taken.component&#x27;;
+import { ArchiefComponent } from &#x27;./archief/archief.component&#x27;;
+import { NotificatiesComponent } from &#x27;./notificaties/notificaties.component&#x27;;
+import { NoodgevalComponent } from &#x27;./noodgeval/noodgeval.component&#x27;;
+import { InstellingenComponent } from &#x27;./instellingen/instellingen.component&#x27;;
+import { DefectMeldenComponent } from &#x27;./defect-melden/defect-melden.component&#x27;;
+import { CreateDefectComponent } from &#x27;./create-defect/create-defect.component&#x27;;
+import { MsalGuard } from &#x27;@azure/msal-angular&#x27;;
+import { CreateTaskComponent } from &#x27;./create-task/create-task.component&#x27;;
+import { AuthGuard } from &#x27;./auth-service/auth-guard&#x27;;
+import { MeldingDetailComponent } from &#x27;./melding-detail/melding-detail.component&#x27;;
+import { TaskMeldenComponent } from &#x27;./task-melden/task-melden.component&#x27;;
+import { AdminViewComponent } from &#x27;./admin-view/admin-view.component&#x27;;
+import { TaskDetailComponent } from &#x27;./task-detail/task-detail.component&#x27;;
+import { AdminGuard } from &#x27;./auth-service/admin-guard&#x27;;
+import { MijnTakenGuard } from &#x27;./auth-service/mijn-taken-guard&#x27;;
+import { CategoryComponent } from &#x27;./category/category.component&#x27;;
+
+export const routes: Routes &#x3D; [
+
+{
+    path: &#x27;login&#x27;,
+    component: AuthComponent,
+    pathMatch: &#x27;full&#x27;,
+},
+{
+    path: &#x27;&#x27;,
+    component: OverzichtComponent,
+      canActivate: [AuthGuard]
+  },
+{
+  //iedereen
+    path: &#x27;mijn-meldingen&#x27;,
+    component: MijnMeldingenComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //opleingshoof , admin, mederwerker, maar medewerker kan alleen de toegewezen aan mij zien
+  //admin en opleidingshoofd kan alleen mijn taken zien.
+    path: &#x27;mijn-taken&#x27;,
+    component: MijnTakenComponent,
+    canActivate: [AuthGuard, MijnTakenGuard]
+},
+{
+  //iedereen
+    path: &#x27;archief&#x27;,
+    component: ArchiefComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //iedereen
+    path: &#x27;notificaties&#x27;,
+    component: NotificatiesComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //iedereen maar update enkel door admin
+    path: &#x27;noodgeval&#x27;,
+    component: NoodgevalComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //iedereen
+    path: &#x27;instellingen&#x27;,
+    component: InstellingenComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //iedereen
+    path: &#x27;meldingen/defectMelden&#x27;,
+    component: DefectMeldenComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //iedereen
+    path: &#x27;meldingen/createDefect&#x27;,
+    component: CreateDefectComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //opleidingshoofd en admin alleen
+    path: &#x27;tasks/createTask&#x27;,
+    component: CreateTaskComponent,
+    canActivate: [AuthGuard]
+},
+{
+  //iedereen
+  path: &#x27;meldingen/detail/:id&#x27;,
+  component: MeldingDetailComponent,
+  canActivate: [AuthGuard]
+},
+{
+  //iedereen
+  path: &#x27;tasks/detail/:id&#x27;,
+  component: TaskDetailComponent,
+  canActivate: [AuthGuard]
+},
+  {path: &#x27;**&#x27;, component: NotFoundComponent}
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'module';
+            var COMPODOC_CURRENT_PAGE_URL = 'AppRoutingModule.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

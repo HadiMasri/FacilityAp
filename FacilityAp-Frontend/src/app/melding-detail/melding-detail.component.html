@@ -1,0 +1,390 @@
+<div class="container" *ngIf='isLoaded'>
+
+
+    <!-- Desktop -->
+    <div class="row desktop" [hidden]='newInnerWidth < 500'>
+        <!-- Algemeen -->
+        <div id='general' class="col-4">
+            <h4>{{report.title}}</h4>
+            <p>{{report.campus}} {{report.location}} <span id='closeTo' *ngIf='report.closeTo'>(In de buurt)</span></p>
+
+            <div id='info-top'>
+                <span id='category'>{{report.category}}</span>
+                <span id='priority'>
+                  <p>{{report.upVote}} meldingen</p>
+                  <span class='dot' [ngStyle]="{'background-color': setPriorityColor(report.upVote)}"></span>
+                </span>
+            </div>
+
+            <div id="info-bottom">
+                <div class="info-bottom-user">
+                    <p><span class="material-icons">account_circle</span>{{report.reporterName}}</p>
+                    <p><span class="material-icons">alarm</span>{{report.createdOn}}</p>
+                </div>
+
+                <!-- <button (click)='subscription()' id='btnSubscribe'>+</button> -->
+                <i *ngIf="!authService.isExternalFirm" [ngStyle]="{'color':isGeaboneerd? 'green' : '#af0412', 'font-style':'normal' }" style='cursor:pointer;
+              ' class="fas fa-thumbs-up plusIcon" aria-hidden="true" (click)="subscription()"></i>
+            </div>
+
+            <div *ngFor='let s of report.statusHistory.reverse()' class="status mb-1">
+                <h5>Statuswijziging</h5>
+                <p>{{s}}</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="col-4">
+            <mat-tab-group #tabGroup (selectedTabChange)="handleMatTabChange($event)" [selectedIndex]='selectedIndex'>
+                <mat-tab label='Reacties'>
+
+                    <div class="CommentDiv">
+
+                        <div class="commentInfo" *ngFor='let c of comments; let i = index'>
+                            <h6 style="display: inline;">{{c.createdByName}}</h6>&nbsp;<span class="datum"> {{c.createdOn}}</span>
+                            <p style="height: auto;  word-wrap:break-word;">{{c.text }}</p>
+                            <textarea #content (keyup)="onChangeComment(content.value)" class="updateTextArea" *ngIf="isEditMode && i === CommentIndex" matInput>{{c.text}}</textarea>
+                            <span *ngIf='c.createdById === UserID && !isEditMode' (click)="edit(i)"><mat-icon  class="icons" >edit</mat-icon> &nbsp;</span>
+                            <span (click)="delete(i)" *ngIf='c.createdById === UserID && !isEditMode'> <mat-icon class="icons" >delete_outline</mat-icon></span>
+                            <span (click)="update(i)" *ngIf="isEditMode && i === CommentIndex"> <mat-icon class="icons">save</mat-icon></span>
+                        </div>
+                    </div>
+                    <div>
+                        <mat-form-field class="form-field">
+                            <textarea [(ngModel)]="CommentText" matInput placeholder="Reactie"></textarea>
+                        </mat-form-field>
+                        <div class="send-btn" (click)="AddComment()">
+                            <mat-icon>send</mat-icon>
+                        </div>
+
+                    </div>
+                </mat-tab>
+
+                <mat-tab label='Wijzigen' *ngIf="!authService.isExternalFirm">
+                    <form #updateForm='ngForm'>
+                        <div class="form-group">
+                            <label id='lblTitle' for="title">Titel</label>
+                            <input #title="ngModel" [(ngModel)]="report.title" type="text" class="form-control" id="title" name="title" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$" />
+                            <div class="alert alert-danger" *ngIf="title.invalid && (title.dirty || title.touched)">Titel is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateFormMobile.controls?.title?.errors?.pattern  ">U kan niet start met spatie of met teken of nummer</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Beschrijving</label>
+                            <textarea #description="ngModel" [(ngModel)]="report.description" type="text" class="form-control" id="description" name="description" row="3" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$"></textarea>
+                            <div class="alert alert-danger" *ngIf="description.invalid && (description.dirty || description.touched)">Beschrijving is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateFormMobile.controls?.description?.errors?.pattern  ">U kan niet start met spatie of met teken of nummer</div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="campus col-md-4">Campus</label>
+                            <select #campus="ngModel" [(ngModel)]="report.campus" name="campus" id="campus" class="form-control" required (change)="onCampusChange($event)">
+                              <option selected disabled>kiezen...</option>
+
+                              <option *ngFor="let key of campusesList"  [value]="key">{{key}}</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="floor">Verdieping</label>
+                            <select #floor="ngModel" [(ngModel)]="report.floor" id="floor" name="floor" class="form-control" required (change)="onEtageChange($event)">
+                            <option  *ngFor="let f of floors" [value]="f">{{f}}</option>
+                        </select>
+                            <div class="alert alert-danger" *ngIf="floor.invalid && (floor.dirty || floor.touched)">Verdieping is verplicht.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location col-md-7">Lokaal</label>
+                            <select #location="ngModel" [(ngModel)]="report.location" id="location" name="location" class="form-control" required>
+                            <option  *ngFor="let l of locaties" [value]="l">{{l}}</option>
+                        </select>
+                            <div class="alert alert-danger" *ngIf="location.invalid && (location.dirty || location.touched)">Lokaal is verplicht.</div>
+                            <input [checked]='report.closeTo' (change)='report.closeTo = !report.closeTo' type='checkbox' class='form-check-input ml-1' id='closeToCheck' />
+                            <label class='form-check-label ml-4' for='closeToCheck'>In de buurt</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Afdeling</label>
+                            <select id="department" name="department" #department="ngModel" [(ngModel)]="report.categoryDepartment" class="form-control" required (change)="onDepartmentChange($event)" placeholder="kies een afdeling">
+                          <option selected disabled>kiezen...</option>
+                          <option  *ngFor="let d of departments" [value]="d">{{d}}</option>
+                         </select>
+                            <div class="alert alert-danger" *ngIf="department.invalid && (department.dirty || department.touched)">Afdeling is verplicht.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categorie</label>
+                            <select #category="ngModel" [(ngModel)]="report.category" name="category" class="form-control" required>
+                              <option  *ngFor="let c of Categories" [value]="c">{{c}}</option>
+                          </select>
+                            <div class="alert alert-danger" *ngIf="category.invalid && (category.dirty || category.touched)">Categorie is verplicht.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id='image' (change)="process($event)" />
+                                <label class="custom-file-label" for="image">{{fileName}}</label>
+                            </div>
+                        </div>
+
+                        <button id='confirm' (click)="updateReport()" [disabled]="!updateForm.valid || report.status != 'Wachten op ontvangst door facilitaire diensten'  || report.reporterId !== LogedInUser" class="btn">UPDATEN</button>
+                    </form>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isFacilitaireCoordinator" label='Toewijzen'>
+                    <div id="medewerker" [hidden]="report.assignToFirm.displayName !== null">
+                        <select (change)="onChange($event)" name="employee" id="employee" class="form-control mt-2">
+                      <option selected="true" disabled="disabled">Kies medewerker.</option>
+                      <option *ngFor="let employee of emplyeesList" [value]="employee.id" [label]="employee.name">{{employee.name}}</option>
+                  </select>
+
+                        <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedUserInformation()">Medewerker Toewijzen</button>
+                    </div>
+                    <br>
+                    <br>
+                    <div id="externe" [hidden]="report.assignTo.name !== null">
+                        <select [(ngModel)]="selectedFirm" (change)="onFirmChange()" name="firm" id="firm" class="form-control mt-2">
+                    <option selected="true" disabled="disabled">Kies firma</option>
+                    <option *ngFor="let firm of firmList" [ngValue]="firm">{{firm.displayName}}</option>
+                </select>
+
+                        <div *ngFor="let template of templates">
+                            <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedFirmInformation(); getTemplateById(template.id)">Firma toewijzen</button>
+                        </div>
+                    </div>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isFacilitaireCoordinator" label='Statussen'>
+                    <p class='m-0 pt-1 pb-1'>Status wijzigen</p>
+
+                    <form #statusForm="ngForm" class='mb-1'>
+                        <select #category="ngModel" [(ngModel)]="report.status" id="status" name="status" class="form-control" required>
+                          <option  *ngFor="let s of statusList" [value]="s">{{s}}</option>
+                          <div class="alert alert-danger" *ngIf="category.invalid && (category.dirty || category.touched)">Status is verplicht.</div>
+                      </select>
+
+                        <button id='confirm' (click)="updateReport()" class="btn mt-2">Wijzigen</button>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+
+        <!-- Foto -->
+        <div id='photo' class="col-4">
+            <img id='img-web' *ngIf='report.bytes === null' src="../../assets/images/default.jpg" alt="image">
+            <img id='img-web' *ngIf='report.bytes !== null' src="data:image/jpeg;base64,{{report.bytes}}" alt="image">
+
+            <div class="p-0 m-2 row">
+                <mat-icon class="col-xs-2" style='font-size: 18px;'>build</mat-icon>
+                <span class="col-xs-10">{{report.assignTo.name}}</span>
+                <span class="col-xs-10" *ngIf="report.assignToFirm">{{report.assignToFirm.displayName}}</span>
+            </div>
+            <div class="p-0 m-2 row">
+                <span class="mt-2 p-0 col-xs-12">{{report.description}}</span>
+
+            </div>
+            <div class="p-0 m-2 row">
+                <button *ngIf="!authService.isExternalFirm" class="btn" (click)="onCancelReport()" [disabled]="report.status != 'Wachten op ontvangst door facilitaire diensten'">ANNULEREN</button>
+            </div>
+        </div>
+
+        <div id="return" (click)='goBack()'>
+            <i class="fa fa-undo m-2" aria-hidden="true"></i>
+        </div>
+    </div>
+
+    <!-- Mobile -->
+    <div class="row" [hidden]='newInnerWidth >= 500'>
+        <!-- Algemeen foto -->
+        <main *ngIf='report.bytes === null' style="background-image: url('../../assets/images/default.jpg')" alt="image">
+            <div class="info-mobile">
+                <h4>{{report.title}}</h4>
+                <p>{{report.campus}} {{report.location}} <span id='closeTo' *ngIf='report.closeTo'>(In de buurt)</span></p>
+            </div>
+        </main>
+
+        <!-- Aangepaste foto -->
+        <main *ngIf='report.bytes !== null' [ngStyle]="{'background-image':'url(data:image/jpeg;base64,'+report.bytes+')'}">
+            <div class="info-mobile">
+                <h4>{{report.title}}</h4>
+                <p>{{report.campus}} {{report.location}} <span *ngIf='report.closeTo'>(In de buurt)</span></p>
+            </div>
+        </main>
+
+        <div id='info-top' class='p-3'>
+            <span id='category'>{{report.category}}</span>
+            <span id='priority'>
+              <p>{{report.upVote}} meldingen</p>
+              <span class='dot' [ngStyle]="{'background-color': setPriorityColor(report.upVote)}"></span>
+            </span>
+        </div>
+
+        <div id="info-bottom-mobile" class='p-3'>
+            <div class="info-bottom-user">
+                <p><span class="material-icons">account_circle</span>{{report.reporterName}}</p>
+                <p><span class="material-icons">alarm</span>{{report.createdOn}}</p>
+                <p><span class="material-icons">build</span>{{report.assignTo.name}}</p>
+                <p><span *ngIf="report.assignToFirm"></span>{{report.assignToFirm.displayName}}</p>
+
+            </div>
+
+            <!-- <button (click)='subscription()' id='btnSubscribe'>+</button> -->
+            <div>
+                <i *ngIf="!authService.isExternalFirm" [ngStyle]="{'color':isGeaboneerd? 'green' : '#af0412', 'font-style': 'normal' }" class="fas fa-thumbs-up plusIcon-mobile" aria-hidden="true" (click)="subscription()"></i>
+                <div>
+                    <button class='btn' id='cancel-btn-mobile' (click)="onCancelReport()" [disabled]="report.status != 'Wachten op ontvangst door facilitaire diensten'">
+                      <span class='m-1 p-1'>x</span>
+                  </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="tab-mobile" class="col-11">
+            <mat-tab-group #tabGroup2 (selectedTabChange)="handleMatTabChange($event)" [selectedIndex]='selectedIndex'>
+                <mat-tab label='Beschrijving'>
+                    <p class='mt-2'>{{report.description}}</p>
+                </mat-tab>
+
+                <mat-tab label='Reacties' *ngIf="!authService.isExternalFirm">
+
+                    <div class="CommentDiv-mobile">
+
+                        <div class="commentInfo" *ngFor='let c of comments; let i = index'>
+                            <h6 style="display: inline;">{{c.createdByName}}</h6>&nbsp;<span class="datum"> {{c.createdOn}}</span>
+                            <p style="height: auto;  word-wrap:break-word;">{{c.text }}</p>
+                            <textarea #content (keyup)="onChangeComment(content.value)" class="updateTextArea" *ngIf="isEditMode && i === CommentIndex" matInput>{{c.text}}</textarea>
+                            <span *ngIf='c.createdById === UserID && !isEditMode' (click)="edit(i)"><mat-icon  class="icons" >edit</mat-icon> &nbsp;</span>
+                            <span (click)="delete(i)" *ngIf='c.createdById === UserID && !isEditMode'> <mat-icon class="icons" >delete_outline</mat-icon></span>
+                            <span (click)="update(i)" *ngIf="isEditMode && i === CommentIndex"> <mat-icon class="icons">save</mat-icon></span>
+                        </div>
+                    </div>
+                    <div>
+                        <mat-form-field class="form-field-mobile">
+                            <textarea [(ngModel)]="CommentText" matInput placeholder="Reactie"></textarea>
+                        </mat-form-field>
+                        <div class="send-btn" (click)="AddComment()">
+                            <mat-icon>send</mat-icon>
+                        </div>
+                    </div>
+
+
+
+
+                </mat-tab>
+
+                <mat-tab label='Wijzigen' [hidden]="!authService.isExternalFirm">
+                    <form #updateFormMobile='ngForm'>
+                        <div class="form-group">
+                            <label for="title">Titel</label>
+                            <input #title="ngModel" [(ngModel)]="report.title" type="text" class="form-control" id="title" name="title" placeholder="Titel" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$">
+
+                            <div class="alert alert-danger" *ngIf="title.invalid && (title.dirty || title.touched)">Titel is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateFormMobile.controls?.title?.errors?.pattern">U kan niet start met spatie of met teken of nummer</div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Beschrijving</label>
+                            <textarea #description="ngModel" [(ngModel)]="report.description" type="text" class="form-control" id="description" name="description" row="3" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$"></textarea>
+                            <div class="alert alert-danger" *ngIf="description.invalid && (description.dirty || description.touched)">Beschrijving is verplicht.</div>
+                            <div class="alert alert-danger" *ngIf="updateFormMobile.controls?.description?.errors?.pattern">U kan niet start met spatie of met teken of nummer</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="campus col-md-4">Campus</label>
+                            <select #campus="ngModel" [(ngModel)]="report.campus" name="campus" id="campus" class="form-control" required (change)="onCampusChange($event)">
+                            <option selected disabled>Kiezen...</option>
+                            <option *ngFor="let key of campusesList"  [value]="key">{{key}}</option>
+                        </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="floor">Verdieping</label>
+                            <select #floor="ngModel" [(ngModel)]="report.floor" id="floor" name="floor" class="form-control" required (change)="onEtageChange($event)">
+                          <option  *ngFor="let f of floors" [value]="f">{{f}}</option>
+                      </select>
+                            <div class="alert alert-danger" *ngIf="floor.invalid && (floor.dirty || floor.touched)">Verdieping is verplicht.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="location col-md-7">Lokaal</label>
+                            <select #location="ngModel" [(ngModel)]="report.location" id="location" name="location" class="form-control" required>
+                          <option  *ngFor="let l of locaties" [value]="l">{{l}}</option>
+                      </select>
+                            <div class="alert alert-danger" *ngIf="location.invalid && (location.dirty || location.touched)">Lokaal is verplicht.</div>
+                            <input [checked]='report.closeTo' (change)='report.closeTo = !report.closeTo' type='checkbox' class='form-check-input ml-1' id='closeToCheck' />
+                            <label class='form-check-label ml-4' for='closeToCheck'>In de buurt</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Departement</label>
+                            <select id="department" name="department" #department="ngModel" [(ngModel)]="report.categoryDepartment" class="form-control" required (change)="onDepartmentChange($event)" placeholder="kies een afdeling">
+                        <option selected disabled>Kiezen...</option>
+                        <option  *ngFor="let d of departments" [value]="d">{{d}}</option>
+
+                       </select>
+                            <div class="alert alert-danger" *ngIf="department.invalid && (department.dirty || department.touched)">Departement is verplicht.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categorie</label>
+                            <select #category="ngModel" [(ngModel)]="report.category" name="category" class="form-control" required>
+                              <option  *ngFor="let c of Categories" [value]="c">{{c}}</option>
+                          </select>
+                            <div class="alert alert-danger" *ngIf="category.invalid && (category.dirty || category.touched)">Categorie is verplicht.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id='image' (change)="process($event)" />
+                                <label class="custom-file-label" for="image">{{fileName}}</label>
+                            </div>
+                        </div>
+
+                        <button id='confirm' (click)="updateReport()" [disabled]="!updateFormMobile.valid || report.status != 'Wachten op ontvangst door facilitaire diensten'" class="btn">UPDATEN</button>
+                    </form>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isFacilitaireCoordinator " label='Toewijzen'>
+                    <div id="medewerker" [hidden]="report.assignToFirm.displayName !== null">
+                        <select (change)="onChange($event)" name="employee" id="employee" class="form-control mt-2">
+                      <option selected="true" disabled="disabled">Kies een medewerker</option>
+                      <option *ngFor="let employee of emplyeesList" [value]="employee.id" [label]="employee.name">{{employee.name}}</option>
+                  </select>
+
+                        <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedUserInformation()">Medewerker toewijzen</button>
+                    </div>
+                    <br>
+                    <div id="externe" [hidden]="report.assignTo.name !== null">
+                        <select (change)="onFirmChange($event)" name="firm" id="firm" class="form-control mt-2">
+                    <option selected="true" disabled="disabled">Kies firma</option>
+                    <option *ngFor="let firm of firmList" [value]="firm" [label]="firm.displayName">{{firm.displayName}}</option>
+                </select>
+
+                        <div *ngFor="let template of templates">
+                            <button id='confirm' class="btn mt-2" (click)="getSelectedAssignedFirmInformation(); getTemplateById(template.id)">Firma toewijzen</button>
+                        </div>
+                    </div>
+                </mat-tab>
+
+                <mat-tab *ngIf="authService.isAdmin || authService.isFacilitaireMedewerker || authService.isExternalFirm" label='Statussen'>
+
+                    <p class='m-0 pt-1 pb-1'>Status wijzigen</p>
+
+                    <form #statusFormMobile="ngForm" class='mb-1'>
+                        <select #status="ngModel" [(ngModel)]="report.status" id="status" name="status" class="form-control" required>
+                          <option  *ngFor="let s of statusList" [value]="s">{{s}}</option>
+                          <div class="alert alert-danger" *ngIf="status.invalid && (status.dirty || status.touched)">Status is verplicht</div>
+                      </select>
+
+                        <button id='confirm' (click)="updateReport()" class="btn mt-2">Wijzigen</button>
+                    </form>
+
+                    <div *ngFor='let s of report.statusHistory' class="status mb-1">
+                        <h5>Statuswijziging</h5>
+                        <p>{{s}}</p>
+                    </div>
+                    <span class="mb-3 d-block"></span>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+
+        <div id="return" (click)='goBack()'>
+            <i class="fa fa-undo m-2" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>

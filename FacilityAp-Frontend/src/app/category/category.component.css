@@ -1,0 +1,17 @@
+#title {
+    font-size: 22px;
+}
+
+.red {
+    background-color: #af0412;
+    color: white;
+}
+
+
+#deleteCategory {
+    color: #af0412;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 10px;
+    cursor: pointer;
+}

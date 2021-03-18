@@ -1,0 +1,52 @@
+<div>
+    <div class="content-cotainer">
+        <h5>Voeg contact toe.</h5>
+        <form #contactForm="ngForm">
+            <div class="form-group">
+                <label for="department">Departement</label>
+                <select #department="ngModel" [(ngModel)]="contact.department" id="department" name="department" class="form-control" required (change)="onDepartmentChange($event)" placeholder="kies een afdeling">
+          <option selected disabled>Kiezen...</option>
+          <option  *ngFor="let d of departments" [value]="d">{{d}}</option>
+
+        </select>
+                <div class="alert alert-danger" *ngIf="department.invalid && (department.dirty || department.touched)">Departement is verplicht.</div>
+            </div>
+
+            <div class="form-group">
+                <label id='name' for="name">Naam</label>
+                <input #name="ngModel" [(ngModel)]="contact.name" type="text" class="form-control" id="name" name="name" placeholder="Naam" required/>
+                <div class="alert alert-danger" *ngIf="name.invalid && (name.dirty || name.touched)">Naam is verplicht.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="description col-md-7">Beschrijving (Functieomschrijving)</label>
+                <input #description="ngModel" [(ngModel)]="contact.description" type="text" class="form-control" id="description" name="description" placeholder="Beschrijving" required/>
+                <div class="alert alert-danger" *ngIf="description.invalid && (description.dirty || description.touched)">Beschrijving is verplicht.</div>
+            </div>
+
+            <div class="form-group">
+                <label class="email-lbl" for="Email">E-mailadres</label>
+                <input #email="ngModel" name="email" tabindex="-1" id="email" placeholder="E-mailadres" [(ngModel)]="contact.email" [email]="contact.email!==''" class="form-control email-input" type="email" required />
+                <div class="alert alert-danger" *ngIf="email.errors && email.errors?.required && email.touched">E-mailadres is verplicht.</div>
+                <div class="alert alert-danger" *ngIf="email.errors && email.errors?.email && email.touched">Gelieve een geldige e-mailadres in te geven.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="telephone col-md-7">Telefoon Nr.</label>
+                <input #telefoon="ngModel" [(ngModel)]="contact.telephone" type="tel" class="form-control" id="telefoon" name="telefoon" />
+
+            </div>
+
+            <div class="form-group">
+                <label for="mobile col-md-7">Mobiel Nr.</label>
+                <input #mobile="ngModel" [(ngModel)]="contact.mobile" type="tel" class="form-control" id="mobile" name="mobile" required/>
+                <div class="alert alert-danger" *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">Mobiel nummer is verplicht.</div>
+            </div>
+
+            <button id='confirm' (click)="addContact()" class="btn" [disabled]="!contactForm.valid">Contact Toevoegen</button>
+        </form>
+    </div>
+
+
+
+</div>

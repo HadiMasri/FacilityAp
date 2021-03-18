@@ -1,0 +1,96 @@
+.navContainer {
+    height: 100% !important;
+    overflow: visible !important;
+    background-color: #af0412 !important;
+    position: fixed;
+}
+
+.sidenav {
+    width: 250px !important;
+    overflow-x: hidden;
+}
+
+.toolbar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1 !important;
+    background-color: #af0412 !important;
+}
+
+
+/* .mat-toolbar.mat-primary {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1 !important;
+    background-color: #af0412 !important;
+} */
+
+::ng-deep .mat-drawer-backdrop.mat-drawer-shown {
+    background-color: transparent !important;
+}
+
+.togglebtn {
+    color: white !important;
+    outline: none;
+}
+
+.title {
+    color: white !important;
+}
+
+.toolbarheader {
+    height: 65px !important;
+    padding: 10px !important;
+    background-color: #af0412;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.welkommsg {
+    color: white;
+    text-align: left;
+    margin-left: 10px;
+    text-shadow: 2px 2px 5px red;
+    font-weight: bold;
+}
+
+.imgDiv {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: lightgray;
+    align-items: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.userName {
+    font-size: medium;
+    color: black;
+    margin-top: 10px;
+    margin-left: 5px;
+    color: white;
+}
+
+.email {
+    margin-left: 12%;
+    display: inline;
+}
+
+.mat-sidenav-container {
+    z-index: 100;
+    background-color: #af0412;
+    position: unset;
+}
+
+.rowDiv {
+    margin-left: 10px;
+}
+
+
+/* .navList {
+    display: flex;
+    flex-direction: column;
+} */

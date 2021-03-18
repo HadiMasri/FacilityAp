@@ -1,0 +1,35 @@
+.removeUserIcon {
+  color: #af0412;
+  font-size: 25px;
+  cursor: pointer;
+}
+.user-Selector{
+  margin-top: 5%;
+  margin-bottom: 10px;
+  max-width:  90%;
+  margin-left: 5%;
+  margin-top: 20%;
+}
+/* table {
+  max-width:  80%;
+  margin-left: 10%;
+  margin-top: 5%;
+} */
+.add-member-btn{
+  background-color: #af0412;
+  margin-left: 10%;
+}
+
+.btn{
+  margin-top: 71px;
+  background-color: #af0412;
+  color: white;
+
+}
+
+h4{
+  color: #af0412;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

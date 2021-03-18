@@ -1,0 +1,28 @@
+<table class="table table-striped">
+  <thead>
+    <tr >
+      <th scope="col">Nr</th>
+      <th scope="col">Naam</th>
+      <th *ngIf="role!='Medewerker'" scope="col">Verwijderen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor=" let user of UsersList; let i = index">
+      <th scope="row">{{i+1}}</th>
+      <td >{{user.name}}</td>
+      <td *ngIf="role!='Medewerker'" ><a  (click)="removeMember(user.id, user.name)"><i class="fa fa-minus-circle removeUserIcon"></i></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="role!='Medewerker'">
+  <div>
+  <select [(ngModel)]="newUser" (change)="onUserChange($event)" class="form-control user-Selector">
+    <option   selected="true" disabled="disabled"> Selecteer medewerker</option>
+    <option  *ngFor="let user of selectUsersList"  [ngValue]="user" > {{user.name}}  </option>
+  </select>
+  </div>
+</div>
+
+<button class="btn"  type="submit" mat-flat-button id="yes-button" [mat-dialog-close]="false" (click)="addMember()">Toevoegen</button>
+

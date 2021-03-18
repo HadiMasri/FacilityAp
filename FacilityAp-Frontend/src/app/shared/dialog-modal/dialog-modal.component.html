@@ -1,0 +1,9 @@
+<mat-nav-list>
+    <a routerLink='/meldingen/defectMelden' mat-list-item (click)="openLink($event)">
+        <span mat-line>Defect melden</span>
+        <mat-icon>bug_report</mat-icon>
+    </a>
+    <a *ngIf="authService.isAdmin  || authService.isOpleidinghoofd || authService.isFacilitaireCoordinator || authService.isLogistiekeCoordinator" routerLink='/tasks/createTask' mat-list-item (click)="openLink($event)">
+        <mat-icon>assignment</mat-icon><span mat-line>Taak melden</span>
+    </a>
+</mat-nav-list>

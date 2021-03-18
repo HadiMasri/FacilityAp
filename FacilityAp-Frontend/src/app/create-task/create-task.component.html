@@ -1,0 +1,122 @@
+<div class="container">
+    <div class="jumbotron">
+        <h2>Taak melden</h2>
+        <form #orderForm="ngForm">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="campus">Campus</label>
+                    <select #campus="ngModel" [(ngModel)]="order.campus" (change)="onChange($event.target.value)" name="campus" id="campus" class="form-control" required (change)="onCampusChange($event)">
+            <option selected disabled>Kiezen...</option>
+            <option
+              *ngFor="let key of campusenOption"
+              [value]="key"
+              [label]="key"
+              >{{ key }}</option
+            >
+          </select>
+                    <div class="alert alert-danger" *ngIf="campus.invalid && (campus.dirty || campus.touched)">
+                        Campus is verplicht.
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="floor">Verdieping</label>
+                    <select #floor="ngModel" [(ngModel)]="order.floor" name="floor" id="floor" class="form-control" required (change)="onEtageChange($event)">
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let key of floors" [value]="key">{{ key }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="floor.invalid && (floor.dirty || floor.touched)">
+                        Verdieping is verplicht.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="locatie">Lokaal</label>
+                    <select #location="ngModel" [(ngModel)]="order.location" name="locatie" id="locatie" class="form-control" required>
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let key of locaties" [value]="key">{{
+              key
+            }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="location.invalid && (location.dirty || location.touched)">
+                        Lokaal is verplicht.
+                    </div>
+                    <input [checked]="order.closeTo" (change)="order.closeTo = !order.closeTo" type="checkbox" class="form-check-input ml-1" id="closeToCheck" />
+                    <label class="form-check-label ml-4" for="closeToCheck">In de buurt</label
+          >
+        </div>
+
+        <div class="form-group col-md-2">
+          <label for="date">Datum</label>
+                    <input #date="ngModel" [(ngModel)]="order.date" type="date" class="form-control" id="date" name="date" placeholder="date" required />
+                    <div class="alert alert-danger" *ngIf="date.invalid && (date.dirty || date.touched)">
+                        Datum is verplicht.
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="time">Tijd</label>
+                    <input #time="ngModel" [(ngModel)]="order.time" type="time" class="form-control" name="time" id="time" placeholder="" required />
+                    <div class="alert alert-danger" *ngIf="time.invalid && (time.dirty || time.touched)">
+                        Tijd is verplicht.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="title">Titel</label>
+                    <input #title="ngModel" [(ngModel)]="order.title" type="text" class="form-control" name="title" id="title" placeholder="Titel" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$" />
+                    <div class="alert alert-danger" *ngIf="title.invalid && (title.dirty || title.touched)">
+                        Titel is verplicht.
+                    </div>
+                    <div class="alert alert-danger" *ngIf="orderForm.controls.title?.errors?.pattern">
+                        U kan niet start met spatie of met teken
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="department">Departement</label>
+                    <select #department="ngModel" [(ngModel)]="order.categoryDepartment" id="department" name="department" class="form-control" required (change)="onDepartmentChange($event)" placeholder="kies een afdeling">
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let d of departments" [value]="d">{{ d }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="
+              department.invalid && (department.dirty || department.touched)
+            ">
+                        Departement is verplicht.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="categorie">Categorie</label>
+                    <select #category="ngModel" [(ngModel)]="order.category" id="categorie" name="categorie" class="form-control" required placeholder="kies een afdeling">
+            <option selected disabled>Kiezen...</option>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+                    <div class="alert alert-danger" *ngIf="category.invalid && (category.dirty || category.touched)">
+                        Categorie is verplicht.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Beschrijving</label>
+                <textarea #description="ngModel" [(ngModel)]="order.description" class="form-control" id="description" name="description" rows="3" required pattern="[a-zA-Z][a-zA-Z0-9,.?!@;<>^¨ëêé&çàè)'-§(\s]*$"></textarea>
+                <div class="alert alert-danger" *ngIf="
+            description.invalid && (description.dirty || description.touched)
+          ">
+                    Beschrijving is verplicht.
+                </div>
+                <div class="alert alert-danger" *ngIf="orderForm.controls.description?.errors?.pattern">
+                    U kan niet start met spatie of met teken
+                </div>
+            </div>
+
+            <button (click)="createOrder()" type="submit" class="btn" [disabled]="!orderForm.valid">
+        Indienen
+      </button>
+        </form>
+        <div id="return" (click)="goBack()">
+            <i class="fa fa-undo m-2" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>

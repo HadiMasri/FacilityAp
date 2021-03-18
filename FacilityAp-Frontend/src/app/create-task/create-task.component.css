@@ -1,0 +1,59 @@
+/* update your 'styles.css' with */
+@import '~bootstrap/dist/css/bootstrap.css';
+
+.lable {
+  color: rgb(206, 0, 0);
+}
+
+.jumbotron {
+  background-color: white;
+}
+
+.btn {
+  color: white;
+  background-color: #af0412;
+}
+
+.form-group {
+  flex-wrap: nowrap;
+}
+
+[type="date"] {
+  background:#fff url(../../assets/images/calendar.png)  97% 50% no-repeat ;
+  background-size: 25px;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+
+[type="time"] {
+  background:#fff url(../../assets/images/time.png)  97% 50% no-repeat ;
+  background-size: 25px;
+
+}
+
+[type="time"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+
+#return {
+  width: auto;
+  height: auto;
+  font-size: 20px;
+  color: white;
+  background-color: #af0412;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 50%;
+  z-index: 10;
+  cursor: pointer;
+}

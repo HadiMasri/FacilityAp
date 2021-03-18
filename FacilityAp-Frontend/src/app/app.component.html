@@ -1,0 +1,6 @@
+<!-- <app-nav-bar></app-nav-bar> -->
+<app-nav-bar *ngIf="isLoggedIn() || authService.isExternalFirm"></app-nav-bar>
+<router-outlet ></router-outlet>
+<!-- <div class="container">
+    <router-outlet *ngIf="!disableRouting();"></router-outlet>
+</div> -->

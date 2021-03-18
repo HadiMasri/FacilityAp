@@ -1,0 +1,247 @@
+<div class="ParentDiv container pt-4">
+  <h2>Contact Personen</h2>
+  <p>In geval van nood is het mogelijk om contact op te nemen met één van onderstaande personen.</p>
+
+  <div [hidden]='newInnerWidth <  500'>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Facilitaire diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="3" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of facilitaireContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            ICT diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="3" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of ictContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Logistieke diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="3" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of logistiekContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Didactisch diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="3" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of didactischContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <!-- Alleen op mobile -->
+
+  <div [hidden]='newInnerWidth > 500'>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Facilitaire diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="1" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of facilitaireContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            ICT diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="1" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of ictContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Logistieke diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="1" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of logistiekContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Didactisch diensten
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <form>
+          <mat-grid-list cols="1" rowHeight="250px">
+            <mat-grid-tile *ngFor="let item of didactischContacts">
+              <mat-card class="dashboard-card" style="width: 300px;height: 200px;">
+                <mat-card-header>
+                  <mat-card-title>
+                  <div>{{item.name}}</div>
+                  <div class="description">{{item.description}}</div>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content style="padding: 15px;">
+                  <div>
+                    <div><i class="fas fa-paper-plane"></i> <span><a href="mailto:{{item.email}}">{{item.email}}</a></span></div>
+                    <div><i class="fas fa-phone-square"></i> <span><a href="tel:{{item.telephone}}">{{item.telephone}}</a></span></div>
+                   <div><i class="fas fa-mobile"></i> <span><a href="tel:{{item.mobile}}">{{item.mobile}}</a></span></div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-grid-tile>
+          </mat-grid-list>
+      </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  
+</div>

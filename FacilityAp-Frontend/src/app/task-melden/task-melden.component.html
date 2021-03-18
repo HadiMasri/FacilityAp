@@ -1,0 +1,141 @@
+<div *ngIf='newInnerWidth >  500' class="header">
+  <h2 class="headerText">Alle Taken</h2>
+</div>
+<!-- <mat-form-field *ngIf='newInnerWidth >  500'>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="zoek via Locatie">
+</mat-form-field> -->
+<button *ngIf='newInnerWidth >  500' class="btn" mat-button routerLink='/tasks/createTask'>Create new task</button>
+<br/>
+<div [hidden]='newInnerWidth <  500' class="mat-elevation-z8 mb-3">
+  <br/>
+    <mat-table matTableFilter [dataSource]="dataSource" [exampleEntity]="filterEntity" [filterType]="filterType">
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>
+            <mat-form-field >
+              <input matInput placeholder="Titel" [(ngModel)]="filterEntity.title">
+            </mat-form-field>
+          </mat-header-cell>
+        <mat-cell *matCellDef="let e">{{e.title}}</mat-cell>
+    </ng-container>
+
+
+    <!-- Category Column -->
+    <ng-container matColumnDef="category">
+      <mat-header-cell *matHeaderCellDef>
+          <mat-form-field >
+            <input matInput placeholder="category" [(ngModel)]="filterEntity.category">
+          </mat-form-field>
+        </mat-header-cell>
+      <mat-cell *matCellDef="let e">{{e.category}}</mat-cell>
+  </ng-container>
+
+      <!-- Campus Column -->
+      <ng-container matColumnDef="campus">
+        <mat-header-cell *matHeaderCellDef>
+            <mat-form-field >
+              <input matInput placeholder="Campus" [(ngModel)]="filterEntity.campus">
+            </mat-form-field>
+          </mat-header-cell>
+        <mat-cell *matCellDef="let e">{{e.campus}}</mat-cell>
+    </ng-container>
+
+      <!-- Location Column -->
+        <ng-container matColumnDef="location">
+            <mat-header-cell *matHeaderCellDef>
+                <mat-form-field >
+                  <input matInput placeholder="Location" [(ngModel)]="filterEntity.location">
+                </mat-form-field>
+              </mat-header-cell>
+            <mat-cell *matCellDef="let e">{{e.location}}</mat-cell>
+        </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef>
+            <mat-form-field >
+              <input matInput placeholder="Datum" [(ngModel)]="filterEntity.date">
+            </mat-form-field>
+          </mat-header-cell>
+        <mat-cell *matCellDef="let e">{{e.date}}</mat-cell>
+    </ng-container>
+
+      <!-- Time Column -->
+      <ng-container matColumnDef="time">
+        <mat-header-cell *matHeaderCellDef>
+            <mat-form-field >
+              <input matInput placeholder="Tijd" [(ngModel)]="filterEntity.time">
+            </mat-form-field>
+          </mat-header-cell>
+        <mat-cell *matCellDef="let e">{{e.time}}</mat-cell>
+    </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef>
+            <mat-form-field >
+              <input matInput placeholder="Status" [(ngModel)]="filterEntity.status">
+            </mat-form-field>
+          </mat-header-cell>
+        <mat-cell *matCellDef="let e">{{e.status}}</mat-cell>
+    </ng-container>
+
+    <!-- Details Column -->
+    <ng-container matColumnDef="detail">
+      <mat-header-cell *matHeaderCellDef>
+          <mat-form-field>
+              <input matInput placeholder="Detail">
+          </mat-form-field>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let e"><a [routerLink]="['/tasks/detail', e.id]"><i class="fa fa-info-circle detailsIcon"></i></a></mat-cell>
+  </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<!-- Alleen op mobile -->
+
+
+<mat-form-field *ngIf='newInnerWidth <  500'>
+  <mat-label>Filter</mat-label>
+  <input matInput placeholder="zoek op locatie..." type="text" name="search" [(ngModel)]="searchText" autocomplete="off">
+</mat-form-field>
+
+<div [hidden]='newInnerWidth >  500'>
+  <div class="header">
+      <p>Alle tasks</p>
+  </div>
+  <div *ngFor='let order of orders| filter:searchText' class="row parentRow">
+
+      <div class="col">
+          <div class="row">
+              <div class="col">
+                  <div class="row">
+                      <div class="col-9" style="padding: 0%;">
+                          <h5 class="title"><b>{{ (order.title.length > 30 ) ? (order.title | slice:0:30)+'..':(order.title)}}</b></h5>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <label><b>Campus</b>  : {{order.campus}}  {{order.location}}</label>
+                  </div>
+                  <div class="row">
+                      <label><b>Datum</b>  : {{order.date}} om {{order.time}} uur</label>
+                  </div>
+                  <div class="row ">
+                      <p><b>Status</b> : {{ (order.status.length > 35 ) ? (order.status | slice:0:35)+'..':(order.status)}}</p>
+                  </div>
+
+
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <button *ngIf='newInnerWidth <  500' mat-button class="btn-mobile" routerLink='/tasks/createTask'>Create nieuwe task</button>
+</div>

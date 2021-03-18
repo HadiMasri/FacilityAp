@@ -1,0 +1,10 @@
+<div>
+    <span id='title'>Nieuwe categorie</span>
+
+    <form #categoryForm='ngForm' (ngSubmit)='addCategory()'>
+        <div class='input-group mt-2'>
+            <input #cat='ngModel' type="text" [(ngModel)]='newCategory' name='category' id='category' placeholder='Categorie...' class="form-control" required>
+            <input type="submit" class="btn red ml-1" value='Toevoegen' [disabled]='!categoryForm.valid'>
+        </div>
+    </form>
+</div>

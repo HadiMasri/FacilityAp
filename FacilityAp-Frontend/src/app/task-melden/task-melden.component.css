@@ -1,0 +1,134 @@
+.container {
+  margin-top: 50px;
+  text-align: center;
+}
+
+mat-table {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+  color: #af0412;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: #af0412 !important;
+}
+
+::ng-deep.mat-form-field-underline {
+  /*change color of underline*/
+  background-color: #af0412 !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+  /*change color of underline when focused*/
+  background-color: #af0412 !important;
+  ;
+}
+
+.btn {
+  float: right;
+  color: white;
+  background-color: #af0412;
+  margin-top: 21px;
+}
+
+.header {
+  background-color: #fffdfe9d;
+  padding: 5;
+  text-align: center;
+  color: #af0412;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.example-card {
+  max-width: 100%;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+img {
+  width: 150px;
+  height: 100px;
+}
+
+::ng-deep.mat-card-subtitle {
+  font-weight: bold;
+  float: right;
+  margin-right: 70px;
+}
+
+.group {
+  float: right;
+  display: inline
+}
+
+.prio {
+  border: 1px solid red;
+  background-color: green;
+  border-radius: 50%;
+  color: transparent;
+  float: right;
+  font-size: 10px;
+  height: 10px;
+  width: 10px;
+  margin-top: 20px;
+}
+
+.categorie {
+  background-color: lightgray;
+  border-radius: 8px;
+}
+
+.btn-mobile {
+  text-align: center;
+  color: white;
+  margin-left: 30%;
+  background-color: #af0412;
+}
+
+.parentRow {
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.col-6 {
+  margin-left: 0px;
+  padding: 0px;
+}
+
+img {
+  padding: 0px;
+  width: auto;
+  height: 100px;
+  margin-top: 10%;
+}
+
+.title {
+  padding: 0px;
+}
+
+.detailsIcon {
+  color: #af0412;
+  font-size: 25px;
+}
+
+.parentRow {
+  background-color: rgb(255, 255, 255);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  margin: .5px;
+  margin-bottom: 0.5px;
+  margin-bottom: 10px;
+  padding-left: 3px;
+  opacity: .7;
+}

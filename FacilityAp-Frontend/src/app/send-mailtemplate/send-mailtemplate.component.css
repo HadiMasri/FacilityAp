@@ -1,0 +1,75 @@
+#body {
+  border: none;
+ width: 900px;
+ height: 310px;
+ background: transparent;
+ resize: none;
+ outline: none;
+ max-width: 100%;
+}
+
+#body:focus {
+  outline: 0 !important;
+}
+
+.btn {
+  margin-right: 0;
+  margin-top: 20px;
+  background: #af0412;
+  color: white;
+  border-color: #af0412;
+  position: relative;
+  width: 100px;
+  margin-left: 20px;
+  float: right;
+  display: flex;
+align-content: center;
+justify-content: center;
+}
+
+.fa-save {
+  color: #af0412;
+  font-size: 30px;
+  font-style: normal;
+}
+
+.fa-times-circle {
+  float: right;
+  font-size: 18px;
+  font-style: normal;
+  color: #af0412;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow:none !important;
+  border:1px solid #422918;
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow:none !important;
+  border:1px solid #422918;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+a:focus {
+  outline: 0 !important;
+}
+
+mat-form-field {
+  width: 250px;
+}
+
+#hyperlink {
+  overflow-x: hidden;
+}
+
+.sendMail {
+  float: right;
+  margin-top: 70px;
+}

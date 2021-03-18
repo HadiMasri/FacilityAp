@@ -1,0 +1,46 @@
+
+/* Mail Template */
+.fa-envelope-open {
+  color: #af0412;
+  font-size: 20px;
+  padding-right: 28px;
+}
+
+.template {
+  display: inline-block;
+background: #e0e0e0;
+padding: 0 12px;
+border-radius: 32px;
+}
+
+/* .mail-card {
+  bottom: 20px;
+} */
+
+.mail-card #editTemplate {
+  margin-top: 40px;
+margin-right: -20px;
+}
+
+.mail-card p {
+  padding-bottom: .01px;
+}
+
+.send-mail {
+  margin-right: 0;
+  background: #af0412;
+  color: white;
+  border-color: #af0412;
+  position: relative;
+}
+
+#template {
+  border: none;
+  width: 900px;
+  height: 310px;
+  background: transparent;
+  resize: none;
+  max-width: 100%;
+}
+
+
